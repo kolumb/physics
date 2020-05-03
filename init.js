@@ -15,19 +15,13 @@ function randomColor() {
 }
 
 let pos = new Vector(30, 30);
-let radius = 20;
-let color = randomColor();
+let point = new Point(pos);
 const GRAVITY = new Vector(0, 1);
 
 function frame() {
     ctx.clearRect(0, 0, width, height);
-
-    pos.addMut(GRAVITY);
-
-    ctx.beginPath();
-    ctx.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
-    ctx.fillStyle = color;
-    ctx.fill();
+    point.update();
+    point.draw();
     requestAnimationFrame(frame);
 }
 frame();
