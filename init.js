@@ -7,6 +7,19 @@ let height = (canvas.height = window.innerHeight);
 
 const ctx = canvas.getContext("2d");
 
-ctx.beginPath();
-ctx.arc(width / 2, height / 2, 20, 0, Math.PI * 2);
-ctx.fill();
+let x = 30;
+let y = 30;
+let radius = 20;
+let color = "#000";
+
+function frame() {
+    ctx.clearRect(0, 0, width, height);
+
+    x += 10;
+
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+    requestAnimationFrame(frame);
+}
+frame();
