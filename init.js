@@ -9,6 +9,7 @@ const ctx = canvas.getContext("2d");
 const GRAVITY = new Vector(0, 1);
 const FLOOR_FACTOR = 6;
 const FLOOR = ((FLOOR_FACTOR - 1) * height) / FLOOR_FACTOR;
+let pause = false;
 
 function randomColor() {
     const r = Math.round(Math.random() * 255);
@@ -39,6 +40,17 @@ function frame() {
 
     lines.map((l) => l.draw());
 
-    requestAnimationFrame(frame);
+    if (pause === false) {
+        requestAnimationFrame(frame);
+    }
 }
 frame();
+
+const pauseHandler = function() {
+    pause = !pause;
+    if (pause === false) {
+        frame();
+    }
+};
+
+window.addEventListener("keydown", pauseHandler);
