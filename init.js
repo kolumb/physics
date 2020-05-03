@@ -19,6 +19,10 @@ const points = [];
 points.push(new Point(new Vector(width / 3, height / 3)));
 points.push(new Point(new Vector((2 * width) / 3, height / 3)));
 points.push(new Point(new Vector((5 * width) / 11, (2 * height) / 3)));
+const lines = [];
+lines.push(new Line(points[0], points[1]));
+lines.push(new Line(points[1], points[2]));
+lines.push(new Line(points[2], points[0]));
 
 function frame() {
     ctx.clearRect(0, 0, width, height);
@@ -30,6 +34,9 @@ function frame() {
 
     points.map((p) => p.update());
     points.map((p) => p.draw());
+
+    lines.map((l) => l.draw());
+
     requestAnimationFrame(frame);
 }
 frame();
