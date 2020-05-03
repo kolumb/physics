@@ -14,14 +14,16 @@ function randomColor() {
     return `rgb(${r},${g},${b},1)`;
 }
 
-let pos = new Vector(30, 30);
-let point = new Point(pos);
+const points = [];
+points.push(new Point(new Vector(width / 3, height / 3)));
+points.push(new Point(new Vector((2 * width) / 3, height / 3)));
+points.push(new Point(new Vector((5 * width) / 11, (2 * height) / 3)));
 const GRAVITY = new Vector(0, 1);
 
 function frame() {
     ctx.clearRect(0, 0, width, height);
-    point.update();
-    point.draw();
+    points.map((p) => p.update());
+    points.map((p) => p.draw());
     requestAnimationFrame(frame);
 }
 frame();
