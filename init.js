@@ -39,6 +39,7 @@ function frame() {
     points.map((p) => p.draw());
 
     lines.map((l) => l.draw());
+    lines.map((l) => l.update());
 
     if (pause === false) {
         requestAnimationFrame(frame);

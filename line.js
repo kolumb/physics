@@ -3,6 +3,7 @@ class Line {
         this.p1 = p1;
         this.p2 = p2;
         this.length = this.p1.pos.dist(this.p2.pos);
+        this.currentLength = this.length;
         this.color = color;
         this.width = width;
     }
@@ -15,11 +16,14 @@ class Line {
         ctx.lineWidth = this.width;
         ctx.stroke();
         ctx.fillText(
-            this.length.toFixed(),
+            this.currentLength.toFixed(),
             (this.p1.pos.x + this.p2.pos.x) / 2,
             (this.p1.pos.y + this.p2.pos.y) / 2
         );
         ctx.restore();
     }
-    update() {}
+    update() {
+        const newLength = this.p1.pos.dist(this.p2.pos);
+        this.currentLength = newLength;
+    }
 }
