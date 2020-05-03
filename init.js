@@ -1,1 +1,1 @@
-console.log("connected");
+const canvas = document.querySelector("#Canvas");
