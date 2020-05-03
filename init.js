@@ -27,11 +27,6 @@ lines.push(new Line(points[2], points[0]));
 function frame() {
     ctx.clearRect(0, 0, width, height);
 
-    ctx.beginPath();
-    ctx.moveTo(points[0].pos.x, points[0].pos.y);
-    ctx.lineTo(points[2].pos.x, points[2].pos.y);
-    ctx.stroke();
-
     points.map((p) => p.update());
     points.map((p) => p.draw());
 
