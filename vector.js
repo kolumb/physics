@@ -11,6 +11,7 @@ class Vector {
     addMut(v) {
         this.x += v.x;
         this.y += v.y;
+        return this;
     }
     dist(v) {
         const dx = this.x - v.x;
@@ -28,6 +29,7 @@ class Vector {
     scaleMut(f) {
         this.x *= f;
         this.y *= f;
+        return this;
     }
     static fromAngle(a) {
         return new Vector(Math.cos(a), Math.sin(a));
