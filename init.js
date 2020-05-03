@@ -7,6 +7,8 @@ let height = (canvas.height = window.innerHeight);
 
 const ctx = canvas.getContext("2d");
 const GRAVITY = new Vector(0, 1);
+const FLOOR_FACTOR = 6;
+const FLOOR = ((FLOOR_FACTOR - 1) * height) / FLOOR_FACTOR;
 
 function randomColor() {
     const r = Math.round(Math.random() * 255);
@@ -26,6 +28,11 @@ lines.push(new Line(points[2], points[0]));
 
 function frame() {
     ctx.clearRect(0, 0, width, height);
+
+    ctx.save();
+    ctx.fillStyle = "grey";
+    ctx.fillRect(0, FLOOR, width, height / FLOOR_FACTOR);
+    ctx.restore();
 
     points.map((p) => p.update());
     points.map((p) => p.draw());

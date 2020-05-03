@@ -7,6 +7,9 @@ class Point {
 
     update() {
         this.pos.addMut(GRAVITY);
+        if (this.pos.y > FLOOR) {
+            this.pos.y = FLOOR;
+        }
     }
 
     draw() {
