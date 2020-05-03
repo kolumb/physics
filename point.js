@@ -7,8 +7,8 @@ class Point {
 
     update() {
         this.pos.addMut(GRAVITY);
-        if (this.pos.y > FLOOR) {
-            this.pos.y = FLOOR;
+        if (this.pos.y > FLOOR - this.radius) {
+            this.pos.y = FLOOR - this.radius;
         }
     }
 
