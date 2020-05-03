@@ -17,4 +17,19 @@ class Vector {
         const dy = this.y - v.y;
         return Math.sqrt(dx ** 2 + dy ** 2);
     }
+    angleTo(v) {
+        const dx = v.x - this.x;
+        const dy = v.y - this.y;
+        return Math.atan2(dy, dx);
+    }
+    scale(f) {
+        return new Vector(this.x * f, this.y * f);
+    }
+    scaleMut(f) {
+        this.x *= f;
+        this.y *= f;
+    }
+    static fromAngle(a) {
+        return new Vector(Math.cos(a), Math.sin(a));
+    }
 }
