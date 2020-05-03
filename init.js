@@ -9,6 +9,7 @@ const ctx = canvas.getContext("2d");
 
 let x = 30;
 let y = 30;
+let pos = new Vector(30, 30);
 let radius = 20;
 let color = "#000";
 
