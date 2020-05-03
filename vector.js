@@ -32,4 +32,12 @@ class Vector {
     static fromAngle(a) {
         return new Vector(Math.cos(a), Math.sin(a));
     }
+    draw(v) {
+        ctx.save();
+        ctx.moveTo(v.x, v.y);
+        ctx.lineTo(v.x + this.x, v.y + this.y);
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+        ctx.restore();
+    }
 }
