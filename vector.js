@@ -8,4 +8,8 @@ class Vector {
         let y = this.y + v.y;
         return new Vector(x, y);
     }
+    addMut(v) {
+        this.x += v.x;
+        this.y += v.y;
+    }
 }
