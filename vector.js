@@ -36,6 +36,7 @@ class Vector {
     }
     draw(v) {
         ctx.save();
+        ctx.beginPath();
         ctx.moveTo(v.x, v.y);
         ctx.lineTo(v.x + this.x, v.y + this.y);
         ctx.strokeStyle = "black";
