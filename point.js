@@ -3,10 +3,14 @@ class Point {
         this.pos = pos;
         this.radius = radius;
         this.color = color;
+        this.fix = new Vector();
     }
 
     update() {
-        this.pos.addMut(GRAVITY);
+        this.fix.scale(50).draw(this.pos);
+        this.pos.addMut(GRAVITY).addMut(this.fix);
+        this.fix = new Vector();
+
         if (this.pos.y > FLOOR - this.radius) {
             this.pos.y = FLOOR - this.radius;
         }

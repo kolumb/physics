@@ -24,6 +24,12 @@ class Line {
     }
     update() {
         const newLength = this.p1.pos.dist(this.p2.pos);
+        const delta = this.length - newLength;
+        const angle = this.p2.pos.angleTo(this.p1.pos);
+        const fix1 = Vector.fromAngle(angle).scale(delta / 2);
+        const fix2 = fix1.scale(-1);
+        this.p1.fix.addMut(fix1);
+        this.p2.fix.addMut(fix2);
         this.currentLength = newLength;
     }
 }
