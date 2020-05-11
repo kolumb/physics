@@ -57,4 +57,10 @@ const pauseHandler = function(e) {
     }
 };
 
+const mouseDownHandler = function(e) {
+    if (!pause) return;
+    points.push(new Point(new Vector(e.pageX, e.pageY)));
+};
+
 window.addEventListener("keydown", pauseHandler);
+window.addEventListener("mousedown", mouseDownHandler);
