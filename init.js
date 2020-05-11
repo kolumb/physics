@@ -87,7 +87,7 @@ const keydownHandler = function(e) {
 };
 
 const mouseDownHandler = function(e) {
-    if (pause === false) return;
+    if (pause === false || e.button === 2) return;
     const mousePos = new Vector(e.pageX, e.pageY);
     if (e.shiftKey === false) {
         while (selectedPoints.pop()) {}
