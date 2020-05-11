@@ -68,7 +68,18 @@ const keydownHandler = function(e) {
             for (let j = i + 1; j < selectedPoints.length; j++) {
                 const p1 = selectedPoints[i];
                 const p2 = selectedPoints[j];
-                lines.push(new Line(p1, p2));
+                let found = false;
+                lines.map((l) => {
+                    if (
+                        (l.p1 === p1 && l.p2 === p2) ||
+                        (l.p1 === p2 && l.p2 === p1)
+                    ) {
+                        found = true;
+                    }
+                });
+                if (found === false) {
+                    lines.push(new Line(p1, p2));
+                }
             }
         }
         render();
