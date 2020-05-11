@@ -56,12 +56,22 @@ function frame() {
 }
 frame();
 
-const pauseHandler = function(e) {
+const keydownHandler = function(e) {
     if (e.code === "Space") {
         pause = !pause;
         if (pause === false) {
             frame();
         }
+    } else if (e.code === "KeyF") {
+        if (pause === false) return;
+        for (let i = 0; i < selectedPoints.length; i++) {
+            for (let j = i + 1; j < selectedPoints.length; j++) {
+                const p1 = selectedPoints[i];
+                const p2 = selectedPoints[j];
+                lines.push(new Line(p1, p2));
+            }
+        }
+        render();
     }
 };
 
@@ -85,5 +95,5 @@ const mouseDownHandler = function(e) {
     render();
 };
 
-window.addEventListener("keydown", pauseHandler);
+window.addEventListener("keydown", keydownHandler);
 window.addEventListener("mousedown", mouseDownHandler);
