@@ -27,7 +27,7 @@ lines.push(new Line(points[0], points[1]));
 lines.push(new Line(points[1], points[2]));
 lines.push(new Line(points[2], points[0]));
 const selectedPoints = [];
-let lastCreatedPoint;
+let lastSelectedPoint;
 
 function tick() {
     points.map((p) => p.update());
@@ -100,6 +100,7 @@ const mouseDownHandler = function(e) {
             found = true;
             const selectionIndex = selectedPoints.indexOf(p);
             if (selectionIndex < 0) {
+                lastSelectedPoint = p;
                 selectedPoints.push(p);
             } else {
                 selectedPoints.splice(selectionIndex, 1);
@@ -108,11 +109,13 @@ const mouseDownHandler = function(e) {
     });
     if (found === false) {
         const newPoint = new Point(new Vector(mousePos.x, mousePos.y));
-        if (lastCreatedPoint && e.shiftKey) {
-            lines.push(new Line(newPoint, lastCreatedPoint));
+        while (selectedPoints.pop()) {}
+        if (e.shiftKey && lastSelectedPoint) {
+            lines.push(new Line(newPoint, lastSelectedPoint));
         }
         points.push(newPoint);
-        lastCreatedPoint = newPoint;
+        selectedPoints.push(newPoint);
+        lastSelectedPoint = newPoint;
     }
     render();
 };
