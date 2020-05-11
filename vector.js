@@ -13,6 +13,9 @@ class Vector {
         this.y += v.y;
         return this;
     }
+    sub(v) {
+        return this.add(v.scale(-1));
+    }
     dist(v) {
         const dx = this.x - v.x;
         const dy = this.y - v.y;
