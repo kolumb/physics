@@ -103,7 +103,14 @@ const mouseDownHandler = function(e) {
                 lastSelectedPoint = p;
                 selectedPoints.push(p);
             } else {
-                selectedPoints.splice(selectionIndex, 1);
+                const deselectedPoint = selectedPoints.splice(
+                    selectionIndex,
+                    1
+                )[0];
+                if (deselectedPoint === lastSelectedPoint) {
+                    lastSelectedPoint =
+                        selectedPoints[selectedPoints.length - 1];
+                }
             }
         }
     });
