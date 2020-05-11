@@ -10,6 +10,11 @@ const GRAVITY = new Vector(0, 1);
 const FLOOR_FACTOR = 6;
 const FLOOR = ((FLOOR_FACTOR - 1) * height) / FLOOR_FACTOR;
 let pause = false;
+let mouseDownState = false;
+let mouseDrag = false;
+const DRAG_THRESHOLD = 10;
+const mouseDownPos = new Vector(-DRAG_THRESHOLD, -DRAG_THRESHOLD);
+let lastMousePos = new Vector();
 
 function randomColor() {
     const r = Math.round(Math.random() * 255);
@@ -60,6 +65,8 @@ frame();
 const keydownHandler = function(e) {
     if (e.code === "Space") {
         pause = !pause;
+        mouseDrag = false;
+        mouseDownState = false;
         if (pause === false) {
             frame();
         }
@@ -88,34 +95,35 @@ const keydownHandler = function(e) {
 };
 
 const mouseDownHandler = function(e) {
+    mouseDownState = true;
+    mouseDownPos.set(e.pageX, e.pageY);
     if (pause === false || e.button === 2) return;
-    const mousePos = new Vector(e.pageX, e.pageY);
-    if (e.shiftKey === false) {
-        while (selectedPoints.pop()) {}
-    }
     let found = false;
     points.map((p) => {
         if (found === true) return;
-        if (p.radius > p.pos.dist(mousePos)) {
+        if (p.radius > p.pos.dist(mouseDownPos)) {
             found = true;
+            lastSelectedPoint = p;
             const selectionIndex = selectedPoints.indexOf(p);
             if (selectionIndex < 0) {
-                lastSelectedPoint = p;
                 selectedPoints.push(p);
             } else {
-                const deselectedPoint = selectedPoints.splice(
-                    selectionIndex,
-                    1
-                )[0];
-                if (deselectedPoint === lastSelectedPoint) {
-                    lastSelectedPoint =
-                        selectedPoints[selectedPoints.length - 1];
+                if (e.shiftKey === true) {
+                    const deselectedPoint = selectedPoints.splice(
+                        selectionIndex,
+                        1
+                    )[0];
+                    mouseDownState = false;
+                    if (deselectedPoint === lastSelectedPoint) {
+                        lastSelectedPoint =
+                            selectedPoints[selectedPoints.length - 1];
+                    }
                 }
             }
         }
     });
     if (found === false) {
-        const newPoint = new Point(new Vector(mousePos.x, mousePos.y));
+        const newPoint = new Point(mouseDownPos.copy());
         while (selectedPoints.pop()) {}
         if (e.shiftKey && lastSelectedPoint) {
             lines.push(new Line(newPoint, lastSelectedPoint));
@@ -126,6 +134,43 @@ const mouseDownHandler = function(e) {
     }
     render();
 };
+const mouseMoveHandler = function(e) {
+    // console.log(mouseDrag);
+    if (pause === false) return;
+    const mousePos = new Vector(e.pageX, e.pageY);
+    if (mouseDownState && mouseDrag === false) {
+        if (mouseDownPos.dist(mousePos) > DRAG_THRESHOLD) {
+            mouseDrag = true;
+            const notDragingVector = lastMousePos.sub(mouseDownPos);
+            selectedPoints.map((p) => {
+                p.pos.addMut(notDragingVector);
+            });
+        }
+    }
+    if (mouseDrag) {
+        const mouseSpeed = mousePos.sub(lastMousePos);
+        selectedPoints.map((p) => {
+            p.pos.addMut(mouseSpeed);
+        });
+        render();
+    }
+    lastMousePos = mousePos;
+};
+const mouseUpHandler = function(e) {
+    if (mouseDrag === false && e.shiftKey === false) {
+        if (selectedPoints.length > 1) {
+            while (selectedPoints.pop()) {}
+            selectedPoints.push(lastSelectedPoint);
+        } else {
+        }
+    }
+    render();
+    mouseDownState = false;
+    mouseDrag = false;
+};
 
 window.addEventListener("keydown", keydownHandler);
 window.addEventListener("mousedown", mouseDownHandler);
+window.addEventListener("mousemove", mouseMoveHandler);
+window.addEventListener("mouseup", mouseUpHandler);
+window.addEventListener("mouseleave", mouseUpHandler);
