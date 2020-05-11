@@ -47,10 +47,12 @@ function frame() {
 }
 frame();
 
-const pauseHandler = function() {
-    pause = !pause;
-    if (pause === false) {
-        frame();
+const pauseHandler = function(e) {
+    if (e.code === "Space") {
+        pause = !pause;
+        if (pause === false) {
+            frame();
+        }
     }
 };
 
