@@ -68,8 +68,9 @@ const pauseHandler = function(e) {
 const mouseDownHandler = function(e) {
     if (pause === false) return;
     const mousePos = new Vector(e.pageX, e.pageY);
-    selectedPoints.pop();
-    while (selectedPoints.pop()) {}
+    if (e.shiftKey === false) {
+        while (selectedPoints.pop()) {}
+    }
     let found = false;
     points.map((p) => {
         if (found === true) return;
