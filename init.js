@@ -28,7 +28,8 @@ lines.push(new Line(points[1], points[2]));
 lines.push(new Line(points[2], points[0]));
 
 function frame() {
-    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = pause ? "#ddb" : "#ccc";
+    ctx.fillRect(0, 0, width, height);
 
     ctx.save();
     ctx.fillStyle = "grey";

@@ -15,6 +15,7 @@ class Line {
         ctx.strokeStyle = this.color;
         ctx.lineWidth = this.width;
         ctx.stroke();
+        ctx.fillStyle = "black";
         ctx.fillText(
             this.currentLength.toFixed(),
             (this.p1.pos.x + this.p2.pos.x) / 2,
