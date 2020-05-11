@@ -97,7 +97,12 @@ const mouseDownHandler = function(e) {
         if (found === true) return;
         if (p.radius > p.pos.dist(mousePos)) {
             found = true;
-            selectedPoints.push(p);
+            const selectionIndex = selectedPoints.indexOf(p);
+            if (selectionIndex < 0) {
+                selectedPoints.push(p);
+            } else {
+                selectedPoints.splice(selectionIndex, 1);
+            }
         }
     });
     if (found === false) {
