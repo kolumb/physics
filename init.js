@@ -27,7 +27,11 @@ lines.push(new Line(points[0], points[1]));
 lines.push(new Line(points[1], points[2]));
 lines.push(new Line(points[2], points[0]));
 
-function frame() {
+function tick() {
+    points.map((p) => p.update());
+    lines.map((l) => l.update());
+}
+function render() {
     ctx.fillStyle = pause ? "#ddb" : "#ccc";
     ctx.fillRect(0, 0, width, height);
 
@@ -36,11 +40,13 @@ function frame() {
     ctx.fillRect(0, FLOOR, width, height / FLOOR_FACTOR);
     ctx.restore();
 
-    points.map((p) => p.update());
     points.map((p) => p.draw());
-
-    lines.map((l) => l.update());
     lines.map((l) => l.draw());
+}
+
+function frame() {
+    tick();
+    render();
 
     if (pause === false) {
         requestAnimationFrame(frame);
@@ -58,8 +64,9 @@ const pauseHandler = function(e) {
 };
 
 const mouseDownHandler = function(e) {
-    if (!pause) return;
+    if (pause === false) return;
     points.push(new Point(new Vector(e.pageX, e.pageY)));
+    render();
 };
 
 window.addEventListener("keydown", pauseHandler);
