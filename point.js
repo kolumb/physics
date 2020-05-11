@@ -24,4 +24,13 @@ class Point {
         ctx.fill();
         ctx.restore();
     }
+    highlight() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.pos.x, this.pos.y, this.radius, 0, Math.PI * 2);
+        ctx.arc(this.pos.x, this.pos.y, this.radius + 10, 0, Math.PI * 2, true);
+        ctx.fillStyle = "orange";
+        ctx.fill();
+        ctx.restore();
+    }
 }

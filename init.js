@@ -26,6 +26,7 @@ const lines = [];
 lines.push(new Line(points[0], points[1]));
 lines.push(new Line(points[1], points[2]));
 lines.push(new Line(points[2], points[0]));
+const selectedPoints = [];
 
 function tick() {
     points.map((p) => p.update());
@@ -42,6 +43,7 @@ function render() {
 
     points.map((p) => p.draw());
     lines.map((l) => l.draw());
+    if (pause === true) selectedPoints.map((sp) => sp.highlight());
 }
 
 function frame() {
@@ -65,7 +67,20 @@ const pauseHandler = function(e) {
 
 const mouseDownHandler = function(e) {
     if (pause === false) return;
-    points.push(new Point(new Vector(e.pageX, e.pageY)));
+    const mousePos = new Vector(e.pageX, e.pageY);
+    selectedPoints.pop();
+    while (selectedPoints.pop()) {}
+    let found = false;
+    points.map((p) => {
+        if (found === true) return;
+        if (p.radius > p.pos.dist(mousePos)) {
+            found = true;
+            selectedPoints.push(p);
+        }
+    });
+    if (found === false) {
+        points.push(new Point(new Vector(mousePos.x, mousePos.y)));
+    }
     render();
 };
 
