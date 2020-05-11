@@ -27,6 +27,7 @@ lines.push(new Line(points[0], points[1]));
 lines.push(new Line(points[1], points[2]));
 lines.push(new Line(points[2], points[0]));
 const selectedPoints = [];
+let lastCreatedPoint;
 
 function tick() {
     points.map((p) => p.update());
@@ -106,7 +107,12 @@ const mouseDownHandler = function(e) {
         }
     });
     if (found === false) {
-        points.push(new Point(new Vector(mousePos.x, mousePos.y)));
+        const newPoint = new Point(new Vector(mousePos.x, mousePos.y));
+        if (lastCreatedPoint && e.shiftKey) {
+            lines.push(new Line(newPoint, lastCreatedPoint));
+        }
+        points.push(newPoint);
+        lastCreatedPoint = newPoint;
     }
     render();
 };
