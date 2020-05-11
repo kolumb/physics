@@ -31,6 +31,14 @@ class Vector {
         this.y *= f;
         return this;
     }
+    copy() {
+        return new Vector(this.x, this.y);
+    }
+    set(x, y) {
+        this.x = x;
+        this.y = y;
+        return this;
+    }
     static fromAngle(a) {
         return new Vector(Math.cos(a), Math.sin(a));
     }
