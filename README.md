@@ -1,4 +1,4 @@
 # phisics
 2D phisics engine
 
-[Demo](https://kolumb.tk/code/phisics/)
+[Demo](https://kolumb.tk/code/physics/)
