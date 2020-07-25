@@ -124,7 +124,7 @@ const mouseDownHandler = function(e) {
     });
     if (found === false) {
         const newPoint = new Point(mouseDownPos.copy());
-        while (selectedPoints.pop()) {}
+        selectedPoints.length = 0
         if (e.shiftKey && lastSelectedPoint) {
             lines.push(new Line(newPoint, lastSelectedPoint));
         }
@@ -159,7 +159,7 @@ const mouseMoveHandler = function(e) {
 const mouseUpHandler = function(e) {
     if (mouseDrag === false && e.shiftKey === false) {
         if (selectedPoints.length > 1) {
-            while (selectedPoints.pop()) {}
+            selectedPoints.length = 0
             selectedPoints.push(lastSelectedPoint);
         } else {
         }
