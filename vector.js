@@ -42,6 +42,10 @@ class Vector {
         this.y = y;
         return this;
     }
+    setFrom(v) {
+        this.x = v.x;
+        this.y = v.y;
+    }
     static fromAngle(a) {
         return new Vector(Math.cos(a), Math.sin(a));
     }
