@@ -12,6 +12,7 @@ const FLOOR = ((FLOOR_FACTOR - 1) * height) / FLOOR_FACTOR;
 let pause = false;
 let mouseDownState = false;
 let mouseDrag = false;
+let grabFix = new Vector();
 const DRAG_THRESHOLD = 10;
 const mouseDownPos = new Vector(-DRAG_THRESHOLD, -DRAG_THRESHOLD);
 let lastMousePos = new Vector();
@@ -35,6 +36,11 @@ const selectedPoints = [];
 let lastSelectedPoint;
 
 function tick() {
+    if (pause === false) {
+        if (mouseDrag) {
+            lastSelectedPoint.pos = lastMousePos.add(grabFix);
+        }
+    }
     points.map((p) => p.update());
     lines.map((l) => l.update());
 }
@@ -95,78 +101,100 @@ const keydownHandler = function(e) {
 };
 
 const mouseDownHandler = function(e) {
-    mouseDownState = true;
+    if (e.button === 2) return;
     mouseDownPos.set(e.pageX, e.pageY);
-    if (pause === false || e.button === 2) return;
     let found = false;
     points.map((p) => {
-        if (found === true) return;
+        if (found) return;
         if (p.radius > p.pos.dist(mouseDownPos)) {
             found = true;
             lastSelectedPoint = p;
-            const selectionIndex = selectedPoints.indexOf(p);
-            if (selectionIndex < 0) {
-                selectedPoints.push(p);
-            } else {
-                if (e.shiftKey === true) {
+        }
+    });
+    mouseDownState = true;
+    if (pause) {
+        if (found) {
+            if (e.shiftKey) {
+                const selectionIndex = selectedPoints.indexOf(
+                    lastSelectedPoint
+                );
+                if (selectionIndex < 0) {
+                    selectedPoints.push(lastSelectedPoint);
+                } else {
+                    mouseDownState = false;
                     const deselectedPoint = selectedPoints.splice(
                         selectionIndex,
                         1
                     )[0];
-                    mouseDownState = false;
                     if (deselectedPoint === lastSelectedPoint) {
                         lastSelectedPoint =
                             selectedPoints[selectedPoints.length - 1];
                     }
                 }
+            } else {
+                selectedPoints.length = 0;
+                selectedPoints.push(lastSelectedPoint);
+            }
+        } else {
+            if (e.shiftKey) {
+                const newPoint = new Point(mouseDownPos.copy());
+                points.push(newPoint);
+                if (lastSelectedPoint)
+                    lines.push(new Line(newPoint, lastSelectedPoint));
+                selectedPoints.length = 0;
+                selectedPoints.push(newPoint);
+                lastSelectedPoint = newPoint;
+            } else {
+                if (selectedPoints.length > 0) {
+                    selectedPoints.length = 0;
+                } else {
+                    const newPoint = new Point(mouseDownPos.copy());
+                    points.push(newPoint);
+                    lastSelectedPoint = newPoint;
+                }
             }
         }
-    });
-    if (found === false) {
-        const newPoint = new Point(mouseDownPos.copy());
-        selectedPoints.length = 0
-        if (e.shiftKey && lastSelectedPoint) {
-            lines.push(new Line(newPoint, lastSelectedPoint));
+        render();
+    } else {
+        if (found) {
+            grabFix = lastSelectedPoint.pos.sub(mouseDownPos);
+            mouseDrag = true;
+        } else {
+            mouseDownState = false;
         }
-        points.push(newPoint);
-        selectedPoints.push(newPoint);
-        lastSelectedPoint = newPoint;
     }
-    render();
 };
 const mouseMoveHandler = function(e) {
-    // console.log(mouseDrag);
-    if (pause === false) return;
     const mousePos = new Vector(e.pageX, e.pageY);
-    if (mouseDownState && mouseDrag === false) {
-        if (mouseDownPos.dist(mousePos) > DRAG_THRESHOLD) {
-            mouseDrag = true;
-            const notDragingVector = lastMousePos.sub(mouseDownPos);
-            selectedPoints.map((p) => {
-                p.pos.addMut(notDragingVector);
-            });
+    if (pause) {
+        if (mouseDownState) {
+            if (mouseDrag) {
+                const mouseSpeed = mousePos.sub(lastMousePos);
+                selectedPoints.map((p) => {
+                    p.pos.addMut(mouseSpeed);
+                });
+            } else {
+                if (mouseDownPos.dist(mousePos) > DRAG_THRESHOLD) {
+                    mouseDrag = true;
+                    const wasNotDragingVector = lastMousePos.sub(mouseDownPos);
+                    selectedPoints.map((p) => {
+                        p.pos.addMut(wasNotDragingVector);
+                    });
+                }
+            }
+            render();
+        } else {
         }
-    }
-    if (mouseDrag) {
-        const mouseSpeed = mousePos.sub(lastMousePos);
-        selectedPoints.map((p) => {
-            p.pos.addMut(mouseSpeed);
-        });
-        render();
+    } else {
+        if (mouseDrag) {
+        }
     }
     lastMousePos = mousePos;
 };
 const mouseUpHandler = function(e) {
-    if (mouseDrag === false && e.shiftKey === false) {
-        if (selectedPoints.length > 1) {
-            selectedPoints.length = 0
-            selectedPoints.push(lastSelectedPoint);
-        } else {
-        }
-    }
-    render();
     mouseDownState = false;
     mouseDrag = false;
+    render();
 };
 
 window.addEventListener("keydown", keydownHandler);
