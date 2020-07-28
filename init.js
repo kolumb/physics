@@ -10,12 +10,9 @@ const GRAVITY = new Vector(0, 1);
 const FLOOR_FACTOR = 6;
 const FLOOR = ((FLOOR_FACTOR - 1) * height) / FLOOR_FACTOR;
 let pause = false;
-let mouseDownState = false;
-let mouseDrag = false;
 let grabFix = new Vector();
 const DRAG_THRESHOLD = 10;
-const mouseDownPos = new Vector(-DRAG_THRESHOLD, -DRAG_THRESHOLD);
-let lastMousePos = new Vector();
+Input.pointer.set(-DRAG_THRESHOLD, -DRAG_THRESHOLD);
 
 function randomColor() {
     const r = Math.round(Math.random() * 255);
@@ -37,8 +34,8 @@ let lastSelectedPoint;
 
 function tick() {
     if (pause === false) {
-        if (mouseDrag) {
-            lastSelectedPoint.pos = lastMousePos.add(grabFix);
+        if (Input.drag) {
+            lastSelectedPoint.pos = Input.pointer.add(grabFix);
         }
     }
     points.map((p) => p.update());
@@ -71,8 +68,8 @@ frame();
 const keydownHandler = function(e) {
     if (e.code === "Space") {
         pause = !pause;
-        mouseDrag = false;
-        mouseDownState = false;
+        Input.drag = false;
+        Input.downState = false;
         if (pause === false) {
             frame();
         }
@@ -102,16 +99,16 @@ const keydownHandler = function(e) {
 
 const mouseDownHandler = function(e) {
     if (e.button === 2) return;
-    mouseDownPos.set(e.pageX, e.pageY);
+    Input.downPos.set(e.pageX, e.pageY);
+    Input.downState = true;
     let found = false;
     points.map((p) => {
         if (found) return;
-        if (p.radius > p.pos.dist(mouseDownPos)) {
+        if (p.radius > p.pos.dist(Input.downPos)) {
             found = true;
             lastSelectedPoint = p;
         }
     });
-    mouseDownState = true;
     if (pause) {
         if (found) {
             if (e.shiftKey) {
@@ -121,7 +118,7 @@ const mouseDownHandler = function(e) {
                 if (selectionIndex < 0) {
                     selectedPoints.push(lastSelectedPoint);
                 } else {
-                    mouseDownState = false;
+                    Input.downState = false;
                     const deselectedPoint = selectedPoints.splice(
                         selectionIndex,
                         1
@@ -137,7 +134,7 @@ const mouseDownHandler = function(e) {
             }
         } else {
             if (e.shiftKey) {
-                const newPoint = new Point(mouseDownPos.copy());
+                const newPoint = new Point(Input.downPos.copy());
                 points.push(newPoint);
                 if (lastSelectedPoint)
                     lines.push(new Line(newPoint, lastSelectedPoint));
@@ -148,7 +145,7 @@ const mouseDownHandler = function(e) {
                 if (selectedPoints.length > 0) {
                     selectedPoints.length = 0;
                 } else {
-                    const newPoint = new Point(mouseDownPos.copy());
+                    const newPoint = new Point(Input.downPos.copy());
                     points.push(newPoint);
                     lastSelectedPoint = newPoint;
                 }
@@ -157,43 +154,41 @@ const mouseDownHandler = function(e) {
         render();
     } else {
         if (found) {
-            grabFix = lastSelectedPoint.pos.sub(mouseDownPos);
-            mouseDrag = true;
+            grabFix = lastSelectedPoint.pos.sub(Input.downPos);
+            Input.drag = true;
         } else {
-            mouseDownState = false;
+            Input.downState = false;
         }
     }
 };
 const mouseMoveHandler = function(e) {
     const mousePos = new Vector(e.pageX, e.pageY);
+    Input.speed = mousePos.sub(Input.pointer);
+    Input.pointer.setFrom(mousePos);
     if (pause) {
-        if (mouseDownState) {
-            if (mouseDrag) {
-                const mouseSpeed = mousePos.sub(lastMousePos);
+        if (Input.downState) {
+            if (Input.drag) {
                 selectedPoints.map((p) => {
-                    p.pos.addMut(mouseSpeed);
+                    p.pos.addMut(Input.speed);
                 });
             } else {
-                if (mouseDownPos.dist(mousePos) > DRAG_THRESHOLD) {
-                    mouseDrag = true;
-                    const wasNotDragingVector = lastMousePos.sub(mouseDownPos);
+                if (Input.downPos.dist(Input.pointer) > DRAG_THRESHOLD) {
+                    Input.drag = true;
+                    const wasNotDragingVector = Input.pointer.sub(
+                        Input.downPos
+                    );
                     selectedPoints.map((p) => {
                         p.pos.addMut(wasNotDragingVector);
                     });
                 }
             }
             render();
-        } else {
-        }
-    } else {
-        if (mouseDrag) {
         }
     }
-    lastMousePos = mousePos;
 };
 const mouseUpHandler = function(e) {
-    mouseDownState = false;
-    mouseDrag = false;
+    Input.downState = false;
+    Input.drag = false;
     render();
 };
 
