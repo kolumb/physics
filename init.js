@@ -1,15 +1,14 @@
 "use strict";
 
 const canvas = document.querySelector("#Canvas");
-
-let width = (canvas.width = window.innerWidth);
-let height = (canvas.height = window.innerHeight);
-
 const ctx = canvas.getContext("2d");
-const GRAVITY = new Vector(0, 1);
-const FLOOR_FACTOR = 6;
-const FLOOR = ((FLOOR_FACTOR - 1) * height) / FLOOR_FACTOR;
+
+let width, height;
 let pause = false;
+const FLOOR_FACTOR = 6;
+let floor;
+resizeHandler();
+const GRAVITY = new Vector(0, 1);
 let grabFix = new Vector();
 const DRAG_THRESHOLD = 10;
 Input.pointer.set(-DRAG_THRESHOLD, -DRAG_THRESHOLD);
@@ -47,7 +46,7 @@ function render() {
 
     ctx.save();
     ctx.fillStyle = "grey";
-    ctx.fillRect(0, FLOOR, width, height / FLOOR_FACTOR);
+    ctx.fillRect(0, floor, width, height / FLOOR_FACTOR);
     ctx.restore();
 
     points.map((p) => p.draw());

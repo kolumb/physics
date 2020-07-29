@@ -11,8 +11,8 @@ class Point {
         this.pos.addMut(GRAVITY).addMut(this.fix);
         this.fix = new Vector();
 
-        if (this.pos.y > FLOOR - this.radius) {
-            this.pos.y = FLOOR - this.radius;
+        if (this.pos.y > floor - this.radius) {
+            this.pos.y = floor - this.radius;
         }
     }
 
