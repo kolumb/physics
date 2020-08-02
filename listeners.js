@@ -48,20 +48,32 @@ const pointerDownHandler = function(e) {
     if (e.button === 2) return;
     Input.downPos.set(e.pageX, e.pageY);
     Input.downState = true;
-    let found = false;
+    let foundPoint = false;
+    let foundLine = false;
+    let lastSelectedLine;
     points.map((p) => {
-        if (found) return;
+        if (foundPoint) return;
         if (p.radius > p.pos.dist(Input.downPos)) {
-            found = true;
+            foundPoint = true;
             lastSelectedPoint = p;
         }
     });
+    if (foundPoint === false) {
+        lines.map((l) => {
+            if (foundLine) return;
+            const d = distToSegmentSquared(Input.pointer, l.p1.pos, l.p2.pos);
+            if (d < l.width ** 2) {
+                foundLine = true;
+                lastSelectedLine = l;
+            }
+        });
+    }
     if (pause) {
-        if (found) {
+        if (foundPoint) {
+            selectedLines.length = 0;
             const selectionIndex = selectedPoints.indexOf(lastSelectedPoint);
             if (selectionIndex < 0) {
-                if (e.shiftKey) {
-                } else {
+                if (e.shiftKey === false) {
                     selectedPoints.length = 0;
                 }
                 selectedPoints.push(lastSelectedPoint);
@@ -78,18 +90,34 @@ const pointerDownHandler = function(e) {
                     }
                 }
             }
+        } else if (foundLine) {
+            selectedPoints.length = 0;
+            const selectionIndex = selectedLines.indexOf(lastSelectedLine);
+            if (selectionIndex < 0) {
+                if (e.shiftKey === false) {
+                    selectedLines.length = 0;
+                }
+                selectedLines.push(lastSelectedLine);
+            } else {
+                if (e.shiftKey) {
+                    Input.downState = false;
+                    selectedLines.splice(selectionIndex, 1);
+                }
+            }
         } else {
             if (e.shiftKey) {
                 const newPoint = new Point(Input.downPos.copy());
                 points.push(newPoint);
                 if (lastSelectedPoint)
                     lines.push(new Line(newPoint, lastSelectedPoint));
+                selectedLines.length = 0;
                 selectedPoints.length = 0;
                 selectedPoints.push(newPoint);
                 lastSelectedPoint = newPoint;
             } else {
-                if (selectedPoints.length > 0) {
+                if (selectedPoints.length > 0 || selectedLines.length > 0) {
                     selectedPoints.length = 0;
+                    selectedLines.length = 0;
                 } else {
                     const newPoint = new Point(Input.downPos.copy());
                     points.push(newPoint);
@@ -103,7 +131,7 @@ const pointerDownHandler = function(e) {
             requestAnimationFrame(render);
         }
     } else {
-        if (found) {
+        if (foundPoint) {
             grabFix = lastSelectedPoint.pos.sub(Input.downPos);
             Input.drag = true;
         } else {
@@ -141,6 +169,12 @@ const pointerMoveHandler = function(e) {
                 selectedPoints.map((p) => {
                     p.pos.addMut(Input.speed);
                 });
+                const pointsOfSelectedLines = new Set();
+                selectedLines.map((l) => {
+                    pointsOfSelectedLines.add(l.p1);
+                    pointsOfSelectedLines.add(l.p2);
+                });
+                for (let p of pointsOfSelectedLines) p.pos.addMut(Input.speed);
             } else {
                 if (Input.downPos.dist(Input.pointer) > DRAG_THRESHOLD) {
                     Input.drag = true;
@@ -150,6 +184,13 @@ const pointerMoveHandler = function(e) {
                     selectedPoints.map((p) => {
                         p.pos.addMut(wasNotDragingVector);
                     });
+                    const pointsOfSelectedLines = new Set();
+                    selectedLines.map((l) => {
+                        pointsOfSelectedLines.add(l.p1);
+                        pointsOfSelectedLines.add(l.p2);
+                    });
+                    for (let p of pointsOfSelectedLines)
+                        p.pos.addMut(wasNotDragingVector);
                 }
             }
         }

@@ -11,6 +11,7 @@ let alreadyRequestedFrame = false;
 resizeHandler();
 const GRAVITY = new Vector(0, 1);
 const selectedPoints = [];
+const selectedLines = [];
 let lastSelectedPoint;
 let hoverPoint;
 let hoverLine;
