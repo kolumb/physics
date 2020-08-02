@@ -58,13 +58,15 @@ const pointerDownHandler = function(e) {
     });
     if (pause) {
         if (found) {
-            if (e.shiftKey) {
-                const selectionIndex = selectedPoints.indexOf(
-                    lastSelectedPoint
-                );
-                if (selectionIndex < 0) {
-                    selectedPoints.push(lastSelectedPoint);
+            const selectionIndex = selectedPoints.indexOf(lastSelectedPoint);
+            if (selectionIndex < 0) {
+                if (e.shiftKey) {
                 } else {
+                    selectedPoints.length = 0;
+                }
+                selectedPoints.push(lastSelectedPoint);
+            } else {
+                if (e.shiftKey) {
                     Input.downState = false;
                     const deselectedPoint = selectedPoints.splice(
                         selectionIndex,
@@ -75,9 +77,6 @@ const pointerDownHandler = function(e) {
                             selectedPoints[selectedPoints.length - 1];
                     }
                 }
-            } else {
-                selectedPoints.length = 0;
-                selectedPoints.push(lastSelectedPoint);
             }
         } else {
             if (e.shiftKey) {
