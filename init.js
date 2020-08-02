@@ -7,6 +7,7 @@ let width, height;
 let pause = false;
 const FLOOR_FACTOR = 6;
 let floor;
+let alreadyRequestedFrame = false;
 resizeHandler();
 const GRAVITY = new Vector(0, 1);
 const selectedPoints = [];

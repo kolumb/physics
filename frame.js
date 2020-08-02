@@ -10,6 +10,7 @@ function tick() {
     lines.map((l) => l.update());
 }
 function render() {
+    alreadyRequestedFrame = false;
     ctx.fillStyle = pause ? "#ddb" : "#ccc";
     ctx.fillRect(0, 0, width, height);
 

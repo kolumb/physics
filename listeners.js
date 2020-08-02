@@ -98,7 +98,10 @@ const pointerDownHandler = function(e) {
                 }
             }
         }
-        render();
+        if (alreadyRequestedFrame === false) {
+            alreadyRequestedFrame = true;
+            requestAnimationFrame(render);
+        }
     } else {
         if (found) {
             grabFix = lastSelectedPoint.pos.sub(Input.downPos);
@@ -137,7 +140,10 @@ const pointerMoveHandler = function(e) {
                 }
             }
         }
-        render();
+        if (alreadyRequestedFrame === false) {
+            alreadyRequestedFrame = true;
+            requestAnimationFrame(render);
+        }
     }
 };
 const pointerUpHandler = function(e) {
