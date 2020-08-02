@@ -18,6 +18,7 @@ function render() {
     ctx.fillStyle = "grey";
     ctx.fillRect(0, floor, width, height / FLOOR_FACTOR);
     ctx.restore();
+    if (hoverLine) hoverLine.highlight();
 
     points.map((p) => p.draw());
     lines.map((l) => l.draw());

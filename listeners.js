@@ -116,6 +116,7 @@ const pointerMoveHandler = function(e) {
     Input.speed = pointerPos.sub(Input.pointer);
     Input.pointer.setFrom(pointerPos);
     hoverPoint = undefined;
+    hoverLine = undefined;
     Canvas.classList.remove("interactable");
     points.map((p) => {
         if (hoverPoint) return;
@@ -124,6 +125,16 @@ const pointerMoveHandler = function(e) {
             Canvas.classList.add("interactable");
         }
     });
+    if (hoverPoint === undefined) {
+        lines.map((l) => {
+            if (hoverLine) return;
+            const d = distToSegmentSquared(Input.pointer, l.p1.pos, l.p2.pos);
+            if (d < l.width ** 2) {
+                hoverLine = l;
+                Canvas.classList.add("interactable");
+            }
+        });
+    }
     if (pause) {
         if (Input.downState) {
             if (Input.drag) {

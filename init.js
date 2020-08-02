@@ -13,6 +13,7 @@ const GRAVITY = new Vector(0, 1);
 const selectedPoints = [];
 let lastSelectedPoint;
 let hoverPoint;
+let hoverLine;
 let grabFix = new Vector();
 const DRAG_THRESHOLD = 10;
 Input.pointer.set(-DRAG_THRESHOLD, -DRAG_THRESHOLD);

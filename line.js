@@ -7,6 +7,16 @@ class Line {
         this.color = color;
         this.width = width;
     }
+    update() {
+        const newLength = this.p1.pos.dist(this.p2.pos);
+        const delta = this.length - newLength;
+        const angle = this.p2.pos.angleTo(this.p1.pos);
+        const fix1 = Vector.fromAngle(angle).scale(delta / 2);
+        const fix2 = fix1.scale(-1);
+        this.p1.fix.addMut(fix1);
+        this.p2.fix.addMut(fix2);
+        this.currentLength = newLength;
+    }
     draw() {
         ctx.save();
         ctx.beginPath();
@@ -23,14 +33,14 @@ class Line {
         );
         ctx.restore();
     }
-    update() {
-        const newLength = this.p1.pos.dist(this.p2.pos);
-        const delta = this.length - newLength;
-        const angle = this.p2.pos.angleTo(this.p1.pos);
-        const fix1 = Vector.fromAngle(angle).scale(delta / 2);
-        const fix2 = fix1.scale(-1);
-        this.p1.fix.addMut(fix1);
-        this.p2.fix.addMut(fix2);
-        this.currentLength = newLength;
+    highlight() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(this.p1.pos.x, this.p1.pos.y);
+        ctx.lineTo(this.p2.pos.x, this.p2.pos.y);
+        ctx.strokeStyle = "orange";
+        ctx.lineWidth = this.width + 8;
+        ctx.stroke();
+        ctx.restore();
     }
 }
