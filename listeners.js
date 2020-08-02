@@ -116,10 +116,12 @@ const pointerMoveHandler = function(e) {
     Input.speed = pointerPos.sub(Input.pointer);
     Input.pointer.setFrom(pointerPos);
     hoverPoint = undefined;
+    Canvas.classList.remove("interactable");
     points.map((p) => {
         if (hoverPoint) return;
         if (p.radius > p.pos.dist(Input.pointer)) {
             hoverPoint = p;
+            Canvas.classList.add("interactable");
         }
     });
     if (pause) {
