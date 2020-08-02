@@ -40,6 +40,24 @@ const keydownHandler = function(e) {
             }
         }
         render();
+    } else if (e.code === "Delete" || e.code === "KeyX") {
+        selectedPoints.map((p) => {
+            lines.map((l) => {
+                if (l.p1 === p || l.p2 === p) {
+                    lines.splice(lines.indexOf(l), 1);
+                }
+            });
+            points.splice(points.indexOf(p), 1);
+        });
+        selectedPoints.length = 0;
+        selectedLines.map((l) => {
+            lines.splice(lines.indexOf(l), 1);
+        });
+        selectedLines.length = 0;
+        if (alreadyRequestedFrame === false) {
+            alreadyRequestedFrame = true;
+            requestAnimationFrame(render);
+        }
     }
 };
 window.addEventListener("keydown", keydownHandler);

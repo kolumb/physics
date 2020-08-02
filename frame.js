@@ -19,13 +19,12 @@ function render() {
     ctx.fillRect(0, floor, width, height / FLOOR_FACTOR);
     ctx.restore();
     if (hoverLine) hoverLine.highlight();
-
-    points.map((p) => p.draw());
-    lines.map((l) => l.draw());
     if (pause === true) {
         selectedPoints.map((sp) => sp.highlight());
         selectedLines.map((sl) => sl.highlight());
     }
+    lines.map((l) => l.draw());
+    points.map((p) => p.draw());
     if (hoverPoint) hoverPoint.highlight();
 }
 
