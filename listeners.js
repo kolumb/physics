@@ -112,6 +112,13 @@ const pointerMoveHandler = function(e) {
     const pointerPos = new Vector(e.pageX, e.pageY);
     Input.speed = pointerPos.sub(Input.pointer);
     Input.pointer.setFrom(pointerPos);
+    hoverPoint = undefined;
+    points.map((p) => {
+        if (hoverPoint) return;
+        if (p.radius > p.pos.dist(Input.pointer)) {
+            hoverPoint = p;
+        }
+    });
     if (pause) {
         if (Input.downState) {
             if (Input.drag) {
@@ -129,8 +136,8 @@ const pointerMoveHandler = function(e) {
                     });
                 }
             }
-            render();
         }
+        render();
     }
 };
 const pointerUpHandler = function(e) {

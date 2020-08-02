@@ -21,6 +21,7 @@ function render() {
     points.map((p) => p.draw());
     lines.map((l) => l.draw());
     if (pause === true) selectedPoints.map((sp) => sp.highlight());
+    if (hoverPoint) hoverPoint.highlight();
 }
 
 function frame() {
