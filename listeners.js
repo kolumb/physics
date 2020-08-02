@@ -93,6 +93,7 @@ const pointerDownHandler = function(e) {
                 } else {
                     const newPoint = new Point(Input.downPos.copy());
                     points.push(newPoint);
+                    selectedPoints.push(newPoint);
                     lastSelectedPoint = newPoint;
                 }
             }
