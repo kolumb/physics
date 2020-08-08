@@ -5,6 +5,7 @@ class Line {
         this.length = this.p1.pos.dist(this.p2.pos);
         this.currentLength = this.length;
         this.color = color;
+        this.originalColor = color;
         this.width = width;
     }
     update() {

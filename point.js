@@ -3,6 +3,7 @@ class Point {
         this.pos = pos;
         this.radius = radius;
         this.color = color;
+        this.originalColor = color;
         this.fix = new Vector();
     }
 

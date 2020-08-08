@@ -39,7 +39,6 @@ const keydownHandler = function(e) {
                 }
             }
         }
-        render();
     } else if (e.code === "Delete" || e.code === "KeyX") {
         selectedPoints.map((p) => {
             lines.map((l) => {
@@ -58,6 +57,23 @@ const keydownHandler = function(e) {
             alreadyRequestedFrame = true;
             requestAnimationFrame(render);
         }
+    } else if (e.code === "KeyH") {
+        if (e.altKey) {
+            points.map((p) => (p.color = p.originalColor));
+            lines.map((l) => (l.color = l.originalColor));
+        } else {
+            const toggleHidden = (x) =>
+                (x.color =
+                    x.color === "transparent"
+                        ? x.originalColor
+                        : "transparent");
+            selectedPoints.map(toggleHidden);
+            selectedLines.map(toggleHidden);
+        }
+    }
+    if (pause && alreadyRequestedFrame === false) {
+        alreadyRequestedFrame = true;
+        requestAnimationFrame(render);
     }
 };
 window.addEventListener("keydown", keydownHandler);
