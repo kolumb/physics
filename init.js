@@ -14,6 +14,7 @@ const selectedPoints = [];
 const selectedLines = [];
 let lastSelectedPoint;
 let hoverPoint;
+let cellSize = 50;
 let hoverLine;
 let grabFix = new Vector();
 const DRAG_THRESHOLD = 10;

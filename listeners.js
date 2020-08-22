@@ -12,6 +12,9 @@ const resizeHandler = () => {
 window.addEventListener("resize", resizeHandler);
 
 const keydownHandler = function(e) {
+    if (e.code === "ControlLeft" || e.code === "ControlRight") {
+        Input.ctrl = true;
+    }
     if (e.code === "Space") {
         pause = !pause;
         Input.drag = false;
@@ -78,9 +81,17 @@ const keydownHandler = function(e) {
 };
 window.addEventListener("keydown", keydownHandler);
 
+const keyupHandler = function(e) {
+    if (e.code === "ControlLeft" || e.code === "ControlRight") {
+        Input.ctrl = false;
+    }
+};
+window.addEventListener("keyup", keyupHandler);
+
 const pointerDownHandler = function(e) {
     if (e.button === 2) return;
     Input.downPos.set(e.pageX, e.pageY);
+    Input.downCellIndex.set(0, 0);
     Input.downState = true;
     let foundPoint = false;
     let foundLine = false;
@@ -200,9 +211,27 @@ const pointerMoveHandler = function(e) {
     if (pause) {
         if (Input.downState) {
             if (Input.drag) {
-                selectedPoints.map((p) => {
-                    p.pos.addMut(Input.speed);
-                });
+                if (Input.ctrl) {
+                    const shift = Input.pointer.sub(Input.downPos);
+                    const currentCell = new Vector(
+                        Math.round(shift.x / cellSize),
+                        Math.round(shift.y / cellSize)
+                    );
+                    if (
+                        currentCell.x !== Input.downCellIndex.x ||
+                        currentCell.y !== Input.downCellIndex.y
+                    ) {
+                        const diff = currentCell.sub(Input.downCellIndex);
+                        selectedPoints.map((p) => {
+                            p.pos.addMut(diff.scale(cellSize));
+                        });
+                        Input.downCellIndex.addMut(diff);
+                    }
+                } else {
+                    selectedPoints.map((p) => {
+                        p.pos.addMut(Input.speed);
+                    });
+                }
                 const pointsOfSelectedLines = new Set();
                 selectedLines.map((l) => {
                     pointsOfSelectedLines.add(l.p1);
@@ -210,7 +239,9 @@ const pointerMoveHandler = function(e) {
                 });
                 for (let p of pointsOfSelectedLines) p.pos.addMut(Input.speed);
             } else {
-                if (Input.downPos.dist(Input.pointer) > DRAG_THRESHOLD) {
+                if (Input.ctrl) {
+                    Input.drag = true;
+                } else if (Input.downPos.dist(Input.pointer) > DRAG_THRESHOLD) {
                     Input.drag = true;
                     const wasNotDragingVector = Input.pointer.sub(
                         Input.downPos

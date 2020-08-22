@@ -4,4 +4,6 @@ class Input {
     static downPos = new Vector();
     static downState = false;
     static drag = false;
+    static ctrl = false;
+    static downCellIndex = new Vector();
 }
