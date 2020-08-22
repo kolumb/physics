@@ -218,22 +218,28 @@ const pointerMoveHandler = function(e) {
     hoverPoint = undefined;
     hoverLine = undefined;
     Canvas.classList.remove("interactable");
-    points.map((p) => {
-        if (hoverPoint) return;
-        if (p.radius > p.pos.dist(Input.pointer)) {
-            hoverPoint = p;
-            Canvas.classList.add("interactable");
-        }
-    });
-    if (hoverPoint === undefined) {
-        lines.map((l) => {
-            if (hoverLine) return;
-            const d = distToSegmentSquared(Input.pointer, l.p1.pos, l.p2.pos);
-            if (d < l.width ** 2) {
-                hoverLine = l;
+    if (Input.drag === false) {
+        points.map((p) => {
+            if (hoverPoint) return;
+            if (p.radius > p.pos.dist(Input.pointer)) {
+                hoverPoint = p;
                 Canvas.classList.add("interactable");
             }
         });
+        if (hoverPoint === undefined) {
+            lines.map((l) => {
+                if (hoverLine) return;
+                const d = distToSegmentSquared(
+                    Input.pointer,
+                    l.p1.pos,
+                    l.p2.pos
+                );
+                if (d < l.width ** 2) {
+                    hoverLine = l;
+                    Canvas.classList.add("interactable");
+                }
+            });
+        }
     }
     if (pause) {
         if (Input.downState) {
