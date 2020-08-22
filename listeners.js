@@ -14,6 +14,10 @@ window.addEventListener("resize", resizeHandler);
 const keydownHandler = function(e) {
     if (e.code === "ControlLeft" || e.code === "ControlRight") {
         Input.ctrl = true;
+        if (Input.drag) {
+            Input.downPos.setFrom(Input.pointer);
+            Input.downCellIndex.set(0, 0);
+        }
     }
     if (e.code === "Space") {
         pause = !pause;
@@ -84,6 +88,12 @@ window.addEventListener("keydown", keydownHandler);
 const keyupHandler = function(e) {
     if (e.code === "ControlLeft" || e.code === "ControlRight") {
         Input.ctrl = false;
+        if (Input.drag) {
+            const fixSnappingOffset = Input.pointer.sub(lastSelectedPoint.pos);
+            selectedPoints.map((p) => {
+                p.pos.addMut(fixSnappingOffset);
+            });
+        }
     }
 };
 window.addEventListener("keyup", keyupHandler);
