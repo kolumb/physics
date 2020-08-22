@@ -3,6 +3,9 @@ class Vector {
         this.x = x;
         this.y = y;
     }
+    length() {
+        return Math.sqrt(this.x ** 2 + this.y ** 2);
+    }
     add(v) {
         let x = this.x + v.x;
         let y = this.y + v.y;
