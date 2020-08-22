@@ -151,7 +151,24 @@ const pointerDownHandler = function(e) {
             }
         } else {
             if (e.shiftKey) {
-                const newPoint = new Point(Input.downPos.copy());
+                let newPos;
+                if (lastSelectedPoint) {
+                    if (Input.ctrl) {
+                        let diff = Input.downPos
+                            .sub(lastSelectedPoint.pos)
+                            .scale(1 / cellSize);
+                        diff.set(Math.round(diff.x), Math.round(diff.y));
+                        if (diff.length() < 1) {
+                            return;
+                        }
+                        newPos = lastSelectedPoint.pos.add(
+                            diff.scale(cellSize)
+                        );
+                    } else {
+                        newPos = Input.downPos.copy();
+                    }
+                }
+                const newPoint = new Point(newPos);
                 points.push(newPoint);
                 if (lastSelectedPoint)
                     lines.push(new Line(newPoint, lastSelectedPoint));
