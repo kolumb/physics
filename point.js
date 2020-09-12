@@ -5,10 +5,11 @@ class Point {
         this.color = color;
         this.originalColor = color;
         this.fix = new Vector();
+        this.lastFix = new Vector();
     }
 
     update() {
-        this.fix.scale(50).draw(this.pos);
+        this.lastFix = this.fix.copy();
         this.pos.addMut(GRAVITY).addMut(this.fix);
         this.fix = new Vector();
 
@@ -24,6 +25,7 @@ class Point {
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.restore();
+        this.lastFix.scale(50).draw(this.pos);
     }
     highlight() {
         ctx.save();
