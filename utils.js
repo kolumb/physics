@@ -18,3 +18,6 @@ function distToSegmentSquared(p, v, w) {
     t = Math.max(0, Math.min(1, t));
     return dist2(p, { x: v.x + t * (w.x - v.x), y: v.y + t * (w.y - v.y) });
 }
+function clamp(n, min, max) {
+    return Math.max(Math.min(n, max), min);
+}
