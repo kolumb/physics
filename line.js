@@ -3,7 +3,6 @@ class Line {
         this.p1 = p1;
         this.p2 = p2;
         this.length = this.p1.pos.dist(this.p2.pos);
-        this.currentLength = this.length;
         this.color = color;
         this.originalColor = color;
         this.width = width;
@@ -16,7 +15,6 @@ class Line {
         const fix2 = fix1.scale(-1);
         this.p1.fix.addMut(fix1);
         this.p2.fix.addMut(fix2);
-        this.currentLength = newLength;
     }
     draw() {
         ctx.save();
@@ -34,12 +32,6 @@ class Line {
         ctx.strokeStyle = color;
         ctx.lineWidth = this.width;
         ctx.stroke();
-        ctx.fillStyle = "black";
-        ctx.fillText(
-            this.currentLength.toFixed(),
-            (this.p1.pos.x + this.p2.pos.x) / 2,
-            (this.p1.pos.y + this.p2.pos.y) / 2
-        );
         ctx.restore();
     }
     highlight() {
