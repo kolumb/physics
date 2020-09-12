@@ -1,6 +1,7 @@
 class Point {
     constructor(pos = new Vector(), radius = 10, color = randomColor()) {
         this.pos = pos;
+        this.vel = new Vector();
         this.radius = radius;
         this.color = color;
         this.originalColor = color;
@@ -10,11 +11,16 @@ class Point {
 
     update() {
         this.lastFix = this.fix.copy();
-        this.pos.addMut(GRAVITY).addMut(this.fix);
-        this.fix = new Vector();
+        this.vel
+            .scaleMut(AIR_DENSITY)
+            .addMut(GRAVITY)
+            .addMut(this.fix);
+        this.pos.addMut(this.vel);
+        // this.fix = new Vector();
 
         if (this.pos.y > floor - this.radius) {
             this.pos.y = floor - this.radius;
+            this.vel.y = 0;
         }
     }
 
