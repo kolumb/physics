@@ -23,7 +23,15 @@ class Line {
         ctx.beginPath();
         ctx.moveTo(this.p1.pos.x, this.p1.pos.y);
         ctx.lineTo(this.p2.pos.x, this.p2.pos.y);
-        ctx.strokeStyle = this.color;
+
+        const realLength = this.p1.pos.dist(this.p2.pos);
+        const f = realLength / this.length;
+        const r = Math.floor(clamp(f - 0.5, 0, 1) * 256);
+        const g = Math.floor(clamp(0.5 - Math.abs(1 - f), 0, 0.5) * 256);
+        const b = Math.floor(clamp(1.5 - f, 0, 1) * 256);
+        const color = `rgb(${r}, ${g}, ${b})`;
+
+        ctx.strokeStyle = color;
         ctx.lineWidth = this.width;
         ctx.stroke();
         ctx.fillStyle = "black";
