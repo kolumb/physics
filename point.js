@@ -14,13 +14,15 @@ class Point {
         this.vel
             .scaleMut(AIR_DENSITY)
             .addMut(GRAVITY)
-            .addMut(this.fix);
+            .addMut(this.fix.clamp(RIGIDITY))
+            .clampMut(MAX_FORCE);
         this.pos.addMut(this.vel);
-        // this.fix = new Vector();
+        this.fix = new Vector();
 
         if (this.pos.y > floor - this.radius) {
             this.pos.y = floor - this.radius;
             this.vel.y = 0;
+            this.vel.x *= FRICTION;
         }
     }
 
