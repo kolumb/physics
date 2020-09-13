@@ -6,6 +6,18 @@ class Vector {
     length() {
         return Math.sqrt(this.x ** 2 + this.y ** 2);
     }
+    clamp(length) {
+        if (this.length() < length) return this;
+        const angle = Math.atan2(this.y, this.x);
+        return new Vector(Math.cos(angle) * length, Math.sin(angle) * length);
+    }
+    clampMut(length) {
+        if (this.length() > length) {
+            const angle = Math.atan2(this.y, this.x);
+            this.set(Math.cos(angle) * length, Math.sin(angle) * length);
+        }
+        return this;
+    }
     add(v) {
         let x = this.x + v.x;
         let y = this.y + v.y;
