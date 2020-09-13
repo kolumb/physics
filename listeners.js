@@ -161,31 +161,35 @@ const pointerDownHandler = function(e) {
             }
         } else {
             if (e.shiftKey) {
-                let newPos;
-                if (lastSelectedPoint) {
-                    if (Input.ctrl) {
-                        let diff = Input.downPos
-                            .sub(lastSelectedPoint.pos)
-                            .scale(1 / cellSize);
-                        diff.set(Math.round(diff.x), Math.round(diff.y));
-                        if (diff.length() < 1) {
-                            return;
-                        }
-                        newPos = lastSelectedPoint.pos.add(
-                            diff.scale(cellSize)
-                        );
-                    } else {
-                        newPos = Input.downPos.copy();
-                    }
-                }
-                const newPoint = new Point(newPos);
-                points.push(newPoint);
-                if (lastSelectedPoint)
-                    lines.push(new Line(newPoint, lastSelectedPoint));
                 selectedLines.length = 0;
                 selectedPoints.length = 0;
-                selectedPoints.push(newPoint);
-                lastSelectedPoint = newPoint;
+                if (e.altKey) {
+                    Input.gridCreation = true;
+                } else {
+                    let newPos;
+                    if (lastSelectedPoint) {
+                        if (Input.ctrl) {
+                            let diff = Input.downPos
+                                .sub(lastSelectedPoint.pos)
+                                .scale(1 / cellSize);
+                            diff.set(Math.round(diff.x), Math.round(diff.y));
+                            if (diff.length() < 1) {
+                                return;
+                            }
+                            newPos = lastSelectedPoint.pos.add(
+                                diff.scale(cellSize)
+                            );
+                        } else {
+                            newPos = Input.downPos.copy();
+                        }
+                    }
+                    const newPoint = new Point(newPos);
+                    points.push(newPoint);
+                    if (lastSelectedPoint)
+                        lines.push(new Line(newPoint, lastSelectedPoint));
+                    selectedPoints.push(newPoint);
+                    lastSelectedPoint = newPoint;
+                }
             } else {
                 if (selectedPoints.length > 0 || selectedLines.length > 0) {
                     selectedPoints.length = 0;
@@ -301,6 +305,31 @@ const pointerMoveHandler = function(e) {
 const pointerUpHandler = function(e) {
     Input.downState = false;
     Input.drag = false;
+    if (Input.gridCreation) {
+        let gridWidth = Math.round(
+            (Input.pointer.x - Input.downPos.x) / cellSize
+        );
+        let gridHeight = Math.round(
+            (Input.pointer.y - Input.downPos.y) / cellSize
+        );
+        const topLeftX = Math.min(
+            Input.downPos.x,
+            Input.downPos.x + gridWidth * cellSize
+        );
+        const topLeftY = Math.min(
+            Input.downPos.y,
+            Input.downPos.y + gridHeight * cellSize
+        );
+        for (let i = 0; i <= Math.abs(gridWidth); i++) {
+            for (let j = 0; j <= Math.abs(gridHeight); j++) {
+                let x = topLeftX + i * cellSize;
+                let y = topLeftY + j * cellSize;
+                const newPoint = new Point(new Vector(x, y));
+                points.push(newPoint);
+            }
+        }
+    }
+    Input.gridCreation = false;
     render();
 };
 

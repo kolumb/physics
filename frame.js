@@ -17,6 +17,16 @@ function render() {
     ctx.save();
     ctx.fillStyle = "grey";
     ctx.fillRect(0, floor, width, height / FLOOR_FACTOR);
+    if (Input.gridCreation) {
+        ctx.strokeStyle = "blue";
+        let gridWidth =
+            cellSize *
+            Math.round((Input.pointer.x - Input.downPos.x) / cellSize);
+        let gridHeight =
+            cellSize *
+            Math.round((Input.pointer.y - Input.downPos.y) / cellSize);
+        ctx.strokeRect(Input.downPos.x, Input.downPos.y, gridWidth, gridHeight);
+    }
     ctx.restore();
     if (hoverLine) hoverLine.highlight();
     if (pause === true) {
