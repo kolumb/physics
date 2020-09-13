@@ -10,7 +10,6 @@ class Point {
     }
 
     update() {
-        this.lastFix = this.fix.copy();
         this.vel
             .scaleMut(AIR_DENSITY)
             .addMut(GRAVITY)
@@ -33,7 +32,6 @@ class Point {
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.restore();
-        this.lastFix.scale(50).draw(this.pos);
     }
     highlight() {
         ctx.save();

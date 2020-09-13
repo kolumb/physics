@@ -13,7 +13,7 @@ const GRAVITY = new Vector(0, 0.1);
 const FRICTION = 0.8;
 const AIR_DENSITY = 0.98;
 const MAX_FORCE = 10;
-const RIGIDITY = 1;
+const RIGIDITY = 2;
 const selectedPoints = [];
 const selectedLines = [];
 let lastSelectedPoint;
