@@ -355,12 +355,48 @@ const pointerUpHandler = function(e) {
             Input.downPos.y,
             Input.downPos.y + gridHeight * cellSize
         );
+        const newPoints = [];
         for (let i = 0; i <= Math.abs(gridWidth); i++) {
+            newPoints.push([]);
             for (let j = 0; j <= Math.abs(gridHeight); j++) {
                 let x = topLeftX + i * cellSize;
                 let y = topLeftY + j * cellSize;
                 const newPoint = new Point(new Vector(x, y));
+                newPoints[i][j] = newPoint;
                 points.push(newPoint);
+                selectedPoints.push(newPoint);
+            }
+        }
+        if (e.ctrlKey) {
+            for (let i = 0; i <= Math.abs(gridWidth); i++) {
+                for (let j = 0; j <= Math.abs(gridHeight); j++) {
+                    if (newPoints[i + 1]) {
+                        lines.push(
+                            new Line(newPoints[i][j], newPoints[i + 1][j])
+                        );
+                        if ((i + j) % 2 == 0 && newPoints[i + 1][j + 1]) {
+                            lines.push(
+                                new Line(
+                                    newPoints[i][j],
+                                    newPoints[i + 1][j + 1]
+                                )
+                            );
+                        }
+                    }
+                    if (newPoints[i][j + 1]) {
+                        lines.push(
+                            new Line(newPoints[i][j], newPoints[i][j + 1])
+                        );
+                        if ((i + j) % 2 == 0 && newPoints[i - 1]) {
+                            lines.push(
+                                new Line(
+                                    newPoints[i][j],
+                                    newPoints[i - 1][j + 1]
+                                )
+                            );
+                        }
+                    }
+                }
             }
         }
     }
