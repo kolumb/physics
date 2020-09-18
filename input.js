@@ -7,4 +7,5 @@ class Input {
     static ctrl = false;
     static downCellIndex = new Vector();
     static gridCreation = false;
+    static lineCreation = false;
 }

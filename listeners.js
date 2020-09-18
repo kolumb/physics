@@ -126,22 +126,29 @@ const pointerDownHandler = function(e) {
     if (pause) {
         if (foundPoint) {
             selectedLines.length = 0;
-            const selectionIndex = selectedPoints.indexOf(lastSelectedPoint);
-            if (selectionIndex < 0) {
-                if (e.shiftKey === false) {
-                    selectedPoints.length = 0;
-                }
-                selectedPoints.push(lastSelectedPoint);
+            if (e.altKey) {
+                Input.lineCreation = true;
+                selectedPoints.length = 0;
             } else {
-                if (e.shiftKey) {
-                    Input.downState = false;
-                    const deselectedPoint = selectedPoints.splice(
-                        selectionIndex,
-                        1
-                    )[0];
-                    if (deselectedPoint === lastSelectedPoint) {
-                        lastSelectedPoint =
-                            selectedPoints[selectedPoints.length - 1];
+                const selectionIndex = selectedPoints.indexOf(
+                    lastSelectedPoint
+                );
+                if (selectionIndex < 0) {
+                    if (e.shiftKey === false) {
+                        selectedPoints.length = 0;
+                    }
+                    selectedPoints.push(lastSelectedPoint);
+                } else {
+                    if (e.shiftKey) {
+                        Input.downState = false;
+                        const deselectedPoint = selectedPoints.splice(
+                            selectionIndex,
+                            1
+                        )[0];
+                        if (deselectedPoint === lastSelectedPoint) {
+                            lastSelectedPoint =
+                                selectedPoints[selectedPoints.length - 1];
+                        }
                     }
                 }
             }
@@ -248,33 +255,61 @@ const pointerMoveHandler = function(e) {
     if (pause) {
         if (Input.downState) {
             if (Input.drag) {
-                if (Input.ctrl) {
-                    const shift = Input.pointer.sub(Input.downPos);
-                    const currentCell = new Vector(
-                        Math.round(shift.x / cellSize),
-                        Math.round(shift.y / cellSize)
-                    );
-                    if (
-                        currentCell.x !== Input.downCellIndex.x ||
-                        currentCell.y !== Input.downCellIndex.y
-                    ) {
-                        const diff = currentCell.sub(Input.downCellIndex);
-                        selectedPoints.map((p) => {
-                            p.pos.addMut(diff.scale(cellSize));
+                if (Input.lineCreation) {
+                    let pointedPoint;
+                    points.map((p) => {
+                        if (pointedPoint) return;
+                        if (p.radius > p.pos.dist(Input.pointer)) {
+                            pointedPoint = p;
+                        }
+                    });
+                    if (pointedPoint && pointedPoint !== lastSelectedPoint) {
+                        const p1 = pointedPoint;
+                        const p2 = lastSelectedPoint;
+                        let found = false;
+                        lines.map((l) => {
+                            if (
+                                (l.p1 === p1 && l.p2 === p2) ||
+                                (l.p1 === p2 && l.p2 === p1)
+                            ) {
+                                found = true;
+                            }
                         });
-                        Input.downCellIndex.addMut(diff);
+                        if (found === false) {
+                            lines.push(new Line(p1, p2));
+                        }
+                        lastSelectedPoint = pointedPoint;
                     }
                 } else {
-                    selectedPoints.map((p) => {
-                        p.pos.addMut(Input.speed);
+                    if (Input.ctrl) {
+                        const shift = Input.pointer.sub(Input.downPos);
+                        const currentCell = new Vector(
+                            Math.round(shift.x / cellSize),
+                            Math.round(shift.y / cellSize)
+                        );
+                        if (
+                            currentCell.x !== Input.downCellIndex.x ||
+                            currentCell.y !== Input.downCellIndex.y
+                        ) {
+                            const diff = currentCell.sub(Input.downCellIndex);
+                            selectedPoints.map((p) => {
+                                p.pos.addMut(diff.scale(cellSize));
+                            });
+                            Input.downCellIndex.addMut(diff);
+                        }
+                    } else {
+                        selectedPoints.map((p) => {
+                            p.pos.addMut(Input.speed);
+                        });
+                    }
+                    const pointsOfSelectedLines = new Set();
+                    selectedLines.map((l) => {
+                        pointsOfSelectedLines.add(l.p1);
+                        pointsOfSelectedLines.add(l.p2);
                     });
+                    for (let p of pointsOfSelectedLines)
+                        p.pos.addMut(Input.speed);
                 }
-                const pointsOfSelectedLines = new Set();
-                selectedLines.map((l) => {
-                    pointsOfSelectedLines.add(l.p1);
-                    pointsOfSelectedLines.add(l.p2);
-                });
-                for (let p of pointsOfSelectedLines) p.pos.addMut(Input.speed);
             } else {
                 if (Input.ctrl) {
                     Input.drag = true;
@@ -330,6 +365,7 @@ const pointerUpHandler = function(e) {
         }
     }
     Input.gridCreation = false;
+    Input.lineCreation = false;
     render();
 };
 
