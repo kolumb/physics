@@ -35,16 +35,9 @@ const keydownHandler = function(e) {
                 break;
             case "KeyH":
                 if (e.altKey) {
-                    points.map((p) => (p.color = p.originalColor));
-                    lines.map((l) => (l.color = l.originalColor));
+                    unhide();
                 } else {
-                    const toggleHidden = (x) =>
-                        (x.color =
-                            x.color === "transparent"
-                                ? x.originalColor
-                                : "transparent");
-                    selectedPoints.map(toggleHidden);
-                    selectedLines.map(toggleHidden);
+                    hide();
                 }
                 break;
         }

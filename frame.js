@@ -21,6 +21,18 @@ function connectSelectedPoints() {
     }
 }
 
+const toggleHidden = (x) =>
+    (x.color = x.color === "transparent" ? x.originalColor : "transparent");
+function hide() {
+    selectedPoints.map(toggleHidden);
+    selectedLines.map(toggleHidden);
+}
+
+function unhide() {
+    points.map((p) => (p.color = p.originalColor));
+    lines.map((l) => (l.color = l.originalColor));
+}
+
 function deleteSelected() {
     lines = lines.filter(
         (l) =>
