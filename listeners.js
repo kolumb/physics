@@ -31,15 +31,7 @@ const keydownHandler = function(e) {
                 break;
             case "Delete":
             case "KeyX":
-                lines = lines.filter(
-                    (l) =>
-                        selectedPoints.indexOf(l.p1) < 0 &&
-                        selectedPoints.indexOf(l.p2) < 0
-                );
-                points = points.filter((p) => selectedPoints.indexOf(p) < 0);
-                selectedPoints.length = 0;
-                lines = lines.filter((l) => selectedLines.indexOf(l) < 0);
-                selectedLines.length = 0;
+                deleteSelected();
                 break;
             case "KeyH":
                 if (e.altKey) {
