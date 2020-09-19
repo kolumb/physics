@@ -24,11 +24,11 @@ let grabFix = new Vector();
 const DRAG_THRESHOLD = 10;
 Input.pointer.set(-DRAG_THRESHOLD, -DRAG_THRESHOLD);
 
-const points = [];
+let points = [];
 points.push(new Point(new Vector(width / 3, height / 3)));
 points.push(new Point(new Vector((2 * width) / 3, height / 3)));
 points.push(new Point(new Vector((5 * width) / 11, (2 * height) / 3)));
-const lines = [];
+let lines = [];
 lines.push(new Line(points[0], points[1]));
 lines.push(new Line(points[1], points[2]));
 lines.push(new Line(points[2], points[0]));

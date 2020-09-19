@@ -31,18 +31,14 @@ const keydownHandler = function(e) {
                 break;
             case "Delete":
             case "KeyX":
-                selectedPoints.map((p) => {
-                    lines.map((l) => {
-                        if (l.p1 === p || l.p2 === p) {
-                            lines.splice(lines.indexOf(l), 1);
-                        }
-                    });
-                    points.splice(points.indexOf(p), 1);
-                });
+                lines = lines.filter(
+                    (l) =>
+                        selectedPoints.indexOf(l.p1) < 0 &&
+                        selectedPoints.indexOf(l.p2) < 0
+                );
+                points = points.filter((p) => selectedPoints.indexOf(p) < 0);
                 selectedPoints.length = 0;
-                selectedLines.map((l) => {
-                    lines.splice(lines.indexOf(l), 1);
-                });
+                lines = lines.filter((l) => selectedLines.indexOf(l) < 0);
                 selectedLines.length = 0;
                 break;
             case "KeyH":
