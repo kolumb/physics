@@ -12,9 +12,6 @@ const resizeHandler = () => {
 window.addEventListener("resize", resizeHandler);
 
 const keydownHandler = function(e) {
-    if (e.code === "ControlLeft" || e.code === "ControlRight") {
-        Input.ctrl = true;
-    }
     if (e.code === "Space") {
         pause = !pause;
         Input.drag = false;
@@ -22,40 +19,46 @@ const keydownHandler = function(e) {
         if (pause === false) {
             frame();
         }
-    } else if (e.code === "KeyF") {
-        if (pause) {
-            connectSelectedPoints();
-        }
-    } else if (e.code === "Delete" || e.code === "KeyX") {
-        selectedPoints.map((p) => {
-            lines.map((l) => {
-                if (l.p1 === p || l.p2 === p) {
+    }
+    if (pause) {
+        switch (e.code) {
+            case "ControlLeft":
+            case "ControlRight":
+                Input.ctrl = true;
+                break;
+            case "KeyF":
+                connectSelectedPoints();
+                break;
+            case "Delete":
+            case "KeyX":
+                selectedPoints.map((p) => {
+                    lines.map((l) => {
+                        if (l.p1 === p || l.p2 === p) {
+                            lines.splice(lines.indexOf(l), 1);
+                        }
+                    });
+                    points.splice(points.indexOf(p), 1);
+                });
+                selectedPoints.length = 0;
+                selectedLines.map((l) => {
                     lines.splice(lines.indexOf(l), 1);
+                });
+                selectedLines.length = 0;
+                break;
+            case "KeyH":
+                if (e.altKey) {
+                    points.map((p) => (p.color = p.originalColor));
+                    lines.map((l) => (l.color = l.originalColor));
+                } else {
+                    const toggleHidden = (x) =>
+                        (x.color =
+                            x.color === "transparent"
+                                ? x.originalColor
+                                : "transparent");
+                    selectedPoints.map(toggleHidden);
+                    selectedLines.map(toggleHidden);
                 }
-            });
-            points.splice(points.indexOf(p), 1);
-        });
-        selectedPoints.length = 0;
-        selectedLines.map((l) => {
-            lines.splice(lines.indexOf(l), 1);
-        });
-        selectedLines.length = 0;
-        if (alreadyRequestedFrame === false) {
-            alreadyRequestedFrame = true;
-            requestAnimationFrame(frame);
-        }
-    } else if (e.code === "KeyH") {
-        if (e.altKey) {
-            points.map((p) => (p.color = p.originalColor));
-            lines.map((l) => (l.color = l.originalColor));
-        } else {
-            const toggleHidden = (x) =>
-                (x.color =
-                    x.color === "transparent"
-                        ? x.originalColor
-                        : "transparent");
-            selectedPoints.map(toggleHidden);
-            selectedLines.map(toggleHidden);
+                break;
         }
     }
     if (pause && alreadyRequestedFrame === false) {
