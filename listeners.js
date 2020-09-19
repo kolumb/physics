@@ -23,24 +23,8 @@ const keydownHandler = function(e) {
             frame();
         }
     } else if (e.code === "KeyF") {
-        if (pause === false) return;
-        for (let i = 0; i < selectedPoints.length; i++) {
-            for (let j = i + 1; j < selectedPoints.length; j++) {
-                const p1 = selectedPoints[i];
-                const p2 = selectedPoints[j];
-                let found = false;
-                lines.map((l) => {
-                    if (
-                        (l.p1 === p1 && l.p2 === p2) ||
-                        (l.p1 === p2 && l.p2 === p1)
-                    ) {
-                        found = true;
-                    }
-                });
-                if (found === false) {
-                    lines.push(new Line(p1, p2));
-                }
-            }
+        if (pause) {
+            connectSelectedPoints();
         }
     } else if (e.code === "Delete" || e.code === "KeyX") {
         selectedPoints.map((p) => {
