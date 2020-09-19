@@ -14,10 +14,6 @@ window.addEventListener("resize", resizeHandler);
 const keydownHandler = function(e) {
     if (e.code === "ControlLeft" || e.code === "ControlRight") {
         Input.ctrl = true;
-        if (Input.drag) {
-            Input.downPos.setFrom(Input.pointer);
-            Input.downCellIndex.set(0, 0);
-        }
     }
     if (e.code === "Space") {
         pause = !pause;
@@ -62,7 +58,7 @@ const keydownHandler = function(e) {
         selectedLines.length = 0;
         if (alreadyRequestedFrame === false) {
             alreadyRequestedFrame = true;
-            requestAnimationFrame(render);
+            requestAnimationFrame(frame);
         }
     } else if (e.code === "KeyH") {
         if (e.altKey) {
@@ -80,7 +76,7 @@ const keydownHandler = function(e) {
     }
     if (pause && alreadyRequestedFrame === false) {
         alreadyRequestedFrame = true;
-        requestAnimationFrame(render);
+        requestAnimationFrame(frame);
     }
 };
 window.addEventListener("keydown", keydownHandler);
@@ -88,11 +84,16 @@ window.addEventListener("keydown", keydownHandler);
 const keyupHandler = function(e) {
     if (e.code === "ControlLeft" || e.code === "ControlRight") {
         Input.ctrl = false;
-        if (Input.drag) {
-            const fixSnappingOffset = Input.pointer.sub(lastSelectedPoint.pos);
-            selectedPoints.map((p) => {
-                p.pos.addMut(fixSnappingOffset);
-            });
+        if (Input.gridSnapDrag) {
+            Input.gridSnapDrag = false;
+            if (Input.drag) {
+                const fixSnappingOffset = Input.pointer.sub(
+                    lastSelectedPoint.pos
+                );
+                selectedPoints.map((p) => {
+                    p.pos.addMut(fixSnappingOffset);
+                });
+            }
         }
     }
 };
@@ -211,7 +212,7 @@ const pointerDownHandler = function(e) {
         }
         if (alreadyRequestedFrame === false) {
             alreadyRequestedFrame = true;
-            requestAnimationFrame(render);
+            requestAnimationFrame(frame);
         }
     } else {
         if (foundPoint) {
@@ -281,23 +282,7 @@ const pointerMoveHandler = function(e) {
                         lastSelectedPoint = pointedPoint;
                     }
                 } else {
-                    if (Input.ctrl) {
-                        const shift = Input.pointer.sub(Input.downPos);
-                        const currentCell = new Vector(
-                            Math.round(shift.x / cellSize),
-                            Math.round(shift.y / cellSize)
-                        );
-                        if (
-                            currentCell.x !== Input.downCellIndex.x ||
-                            currentCell.y !== Input.downCellIndex.y
-                        ) {
-                            const diff = currentCell.sub(Input.downCellIndex);
-                            selectedPoints.map((p) => {
-                                p.pos.addMut(diff.scale(cellSize));
-                            });
-                            Input.downCellIndex.addMut(diff);
-                        }
-                    } else {
+                    if (Input.ctrl === false) {
                         selectedPoints.map((p) => {
                             p.pos.addMut(Input.speed);
                         });
@@ -333,7 +318,7 @@ const pointerMoveHandler = function(e) {
         }
         if (alreadyRequestedFrame === false) {
             alreadyRequestedFrame = true;
-            requestAnimationFrame(render);
+            requestAnimationFrame(frame);
         }
     }
 };

@@ -1,16 +1,39 @@
 "use strict";
 
 function tick() {
-    if (pause === false) {
+    if (pause) {
+        if (Input.drag) {
+            if (Input.gridSnapDrag) {
+                const shift = Input.pointer.sub(Input.downPos);
+                const currentCell = new Vector(
+                    Math.round(shift.x / cellSize),
+                    Math.round(shift.y / cellSize)
+                );
+                if (
+                    currentCell.x !== Input.downCellIndex.x ||
+                    currentCell.y !== Input.downCellIndex.y
+                ) {
+                    const diff = currentCell.sub(Input.downCellIndex);
+                    selectedPoints.map((p) => {
+                        p.pos.addMut(diff.scale(cellSize));
+                    });
+                    Input.downCellIndex.addMut(diff);
+                }
+            } else if (Input.ctrl) {
+                Input.gridSnapDrag = true;
+                Input.downPos.setFrom(Input.pointer);
+                Input.downCellIndex.set(0, 0);
+            }
+        }
+    } else {
         if (Input.drag) {
             lastSelectedPoint.pos = Input.pointer.add(grabFix);
         }
+        points.map((p) => p.update());
+        lines.map((l) => l.update());
     }
-    points.map((p) => p.update());
-    lines.map((l) => l.update());
 }
 function render() {
-    alreadyRequestedFrame = false;
     ctx.fillStyle = pause ? "#ddb" : "#ccc";
     ctx.fillRect(0, 0, width, height);
 
@@ -39,6 +62,7 @@ function render() {
 }
 
 function frame() {
+    alreadyRequestedFrame = false;
     tick();
     render();
 
