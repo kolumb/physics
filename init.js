@@ -57,3 +57,4 @@ document
 document.querySelector("#RelaxLinesElem").addEventListener("click", relaxLines);
 document.querySelector("#HideElem").addEventListener("click", hide);
 document.querySelector("#UnhideElem").addEventListener("click", unhide);
+document.querySelector("#DeleteElem").addEventListener("click", deleteSelected);
