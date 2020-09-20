@@ -48,3 +48,6 @@ document.querySelector("#PauseElem").addEventListener("click", pauseHandler);
 document
     .querySelector("#GridSnapElem")
     .addEventListener("click", gridSnapHandler);
+document
+    .querySelector("#ConnectedModeElem")
+    .addEventListener("click", connectedModeHandler);

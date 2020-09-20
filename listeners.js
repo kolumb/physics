@@ -280,7 +280,7 @@ const pointerUpHandler = function(e) {
             }
         }
         activePoint = newPoints[0][0];
-        if (e.altKey) {
+        if (e.altKey || Input.createConnected) {
             for (let i = 0; i <= Math.abs(gridWidth); i++) {
                 for (let j = 0; j <= Math.abs(gridHeight); j++) {
                     if (newPoints[i + 1]) {
@@ -334,4 +334,8 @@ const pauseHandler = function(e) {
 
 const gridSnapHandler = function(e) {
     Input.gridSnapping = !Input.gridSnapping;
+};
+
+const connectedModeHandler = function(e) {
+    Input.createConnected = !Input.createConnected;
 };
