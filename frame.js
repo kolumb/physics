@@ -104,6 +104,7 @@ function render() {
     ctx.save();
     ctx.fillStyle = "grey";
     ctx.fillRect(0, floor, width, height / FLOOR_FACTOR);
+    ctx.fillText("FPS: " + FPS, 10, 15);
     if (Input.gridCreation) {
         ctx.strokeStyle = "blue";
         let gridWidth =
@@ -127,6 +128,12 @@ function render() {
 }
 
 function frame() {
+    frames++;
+    if (performance.now() - lastTime > 1000) {
+        lastTime += 1000;
+        FPS = frames;
+        frames = 0;
+    }
     alreadyRequestedFrame = false;
     tick();
     render();

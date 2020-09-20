@@ -16,9 +16,6 @@ const keydownHandler = function(e) {
         pause = !pause;
         Input.drag = false;
         Input.downState = false;
-        if (pause === false) {
-            frame();
-        }
     }
     if (pause) {
         switch (e.code) {
@@ -42,7 +39,7 @@ const keydownHandler = function(e) {
                 break;
         }
     }
-    if (pause && alreadyRequestedFrame === false) {
+    if (alreadyRequestedFrame === false) {
         alreadyRequestedFrame = true;
         requestAnimationFrame(frame);
     }

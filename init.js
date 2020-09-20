@@ -23,6 +23,9 @@ let hoverLine;
 let grabFix = new Vector();
 const DRAG_THRESHOLD = 10;
 Input.pointer.set(-DRAG_THRESHOLD, -DRAG_THRESHOLD);
+let frames = 0;
+let FPS = 60;
+let lastTime = 0;
 
 let points = [];
 points.push(new Point(new Vector(width / 3, height / 3)));
