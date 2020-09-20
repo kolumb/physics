@@ -51,3 +51,6 @@ document
 document
     .querySelector("#ConnectedModeElem")
     .addEventListener("click", connectedModeHandler);
+document
+    .querySelector("#ConnectSelectedElem")
+    .addEventListener("click", connectSelectedPoints);
