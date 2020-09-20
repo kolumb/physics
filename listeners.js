@@ -7,7 +7,10 @@ const resizeHandler = () => {
     canvas.width = width;
 
     floor = ((FLOOR_FACTOR - 1) * height) / FLOOR_FACTOR;
-    if (pause) render();
+    if (alreadyRequestedFrame === false) {
+        alreadyRequestedFrame = true;
+        requestAnimationFrame(frame);
+    }
 };
 window.addEventListener("resize", resizeHandler);
 
@@ -314,7 +317,10 @@ const pointerUpHandler = function(e) {
     }
     Input.gridCreation = false;
     Input.lineCreation = false;
-    render();
+    if (alreadyRequestedFrame === false) {
+        alreadyRequestedFrame = true;
+        requestAnimationFrame(frame);
+    }
 };
 
 window.addEventListener("pointerdown", pointerDownHandler);
