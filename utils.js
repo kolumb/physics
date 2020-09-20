@@ -76,6 +76,7 @@ function unhide() {
 }
 
 function deleteSelected() {
+    activePoint = undefined;
     lines = lines.filter(
         (l) =>
             selectedPoints.indexOf(l.p1) < 0 && selectedPoints.indexOf(l.p2) < 0

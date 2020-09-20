@@ -279,6 +279,7 @@ const pointerUpHandler = function(e) {
                 selectedPoints.push(newPoint);
             }
         }
+        activePoint = newPoints[0][0];
         if (e.altKey) {
             for (let i = 0; i <= Math.abs(gridWidth); i++) {
                 for (let j = 0; j <= Math.abs(gridHeight); j++) {
