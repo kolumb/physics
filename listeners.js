@@ -131,10 +131,10 @@ const pointerDownHandler = function(e) {
         } else {
             selectedLines.length = 0;
             selectedPoints.length = 0;
-            if (e.shiftKey && e.altKey) {
+            if (e.ctrlKey && e.shiftKey) {
                 Input.gridCreation = true;
             } else {
-                createNewPoint(e.shiftKey);
+                createNewPoint(e.altKey);
             }
         }
         if (alreadyRequestedFrame === false) {
@@ -279,7 +279,7 @@ const pointerUpHandler = function(e) {
                 selectedPoints.push(newPoint);
             }
         }
-        if (e.ctrlKey) {
+        if (e.altKey) {
             for (let i = 0; i <= Math.abs(gridWidth); i++) {
                 for (let j = 0; j <= Math.abs(gridHeight); j++) {
                     if (newPoints[i + 1]) {
