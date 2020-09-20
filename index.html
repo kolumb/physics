@@ -14,10 +14,22 @@
             .interactable {
                 cursor: pointer;
             }
+            .controls {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                position: absolute;
+                top: 1em;
+                right: 1em;
+                user-select: none;
+            }
         </style>
     </head>
     <body>
         <canvas id="Canvas"></canvas>
+        <div class="controls">
+            <button id="PauseElem">Pause</button>
+        </div>
         <script src="vector.js"></script>
         <script src="utils.js"></script>
         <script src="input.js"></script>

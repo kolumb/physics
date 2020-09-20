@@ -15,9 +15,7 @@ const resizeHandler = () => {
 
 const keydownHandler = function(e) {
     if (e.code === "Space") {
-        pause = !pause;
-        Input.drag = false;
-        Input.downState = false;
+        pauseHandler(e);
     }
     if (pause) {
         switch (e.code) {
@@ -40,10 +38,10 @@ const keydownHandler = function(e) {
                 }
                 break;
         }
-    }
-    if (alreadyRequestedFrame === false) {
-        alreadyRequestedFrame = true;
-        requestAnimationFrame(frame);
+        if (alreadyRequestedFrame === false) {
+            alreadyRequestedFrame = true;
+            requestAnimationFrame(frame);
+        }
     }
 };
 
@@ -315,6 +313,17 @@ const pointerUpHandler = function(e) {
     Input.gridCreation = false;
     Input.lineCreation = false;
     if (pause && alreadyRequestedFrame === false) {
+        alreadyRequestedFrame = true;
+        requestAnimationFrame(frame);
+    }
+};
+
+const pauseHandler = function(e) {
+    pause = !pause;
+    Input.drag = false;
+    Input.downState = false;
+    e.preventDefault();
+    if (alreadyRequestedFrame === false) {
         alreadyRequestedFrame = true;
         requestAnimationFrame(frame);
     }
