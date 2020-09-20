@@ -225,12 +225,12 @@ const pointerMoveHandler = function(e) {
                     Input.drag = true;
                 } else if (Input.downPos.dist(Input.pointer) > DRAG_THRESHOLD) {
                     Input.drag = true;
-                    const wasNotDragingVector = Input.pointer.sub(
+                    const wasNotDraggingVector = Input.pointer.sub(
                         Input.downPos
                     );
                     if (Input.gridSnapping === false) {
                         selectedPoints.map((p) => {
-                            p.pos.addMut(wasNotDragingVector);
+                            p.pos.addMut(wasNotDraggingVector);
                         });
                     }
                     const pointsOfSelectedLines = new Set();
@@ -239,7 +239,7 @@ const pointerMoveHandler = function(e) {
                         pointsOfSelectedLines.add(l.p2);
                     });
                     for (let p of pointsOfSelectedLines)
-                        p.pos.addMut(wasNotDragingVector);
+                        p.pos.addMut(wasNotDraggingVector);
                 }
             }
         }
