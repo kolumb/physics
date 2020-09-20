@@ -63,6 +63,26 @@ function connectSelectedPoints() {
     }
 }
 
+function relaxLines() {
+    if (selectedPoints.length) {
+        selectedPoints.map((p) => {
+            lines.map((l) => {
+                if (l.p1 === p || l.p2 === p) {
+                    l.length = l.p1.pos.dist(l.p2.pos);
+                }
+            });
+        });
+    } else if (selectedLines.length) {
+        selectedLines.map((l) => {
+            l.length = l.p1.pos.dist(l.p2.pos);
+        });
+    } else {
+        lines.map((l) => {
+            l.length = l.p1.pos.dist(l.p2.pos);
+        });
+    }
+}
+
 const toggleHidden = (x) =>
     (x.color = x.color === "transparent" ? x.originalColor : "transparent");
 function hide() {

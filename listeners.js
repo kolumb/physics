@@ -26,6 +26,9 @@ const keydownHandler = function(e) {
             case "KeyF":
                 connectSelectedPoints();
                 break;
+            case "KeyR":
+                relaxLines();
+                break;
             case "Delete":
             case "KeyX":
                 deleteSelected();

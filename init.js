@@ -54,3 +54,4 @@ document
 document
     .querySelector("#ConnectSelectedElem")
     .addEventListener("click", connectSelectedPoints);
+document.querySelector("#RelaxLinesElem").addEventListener("click", relaxLines);
