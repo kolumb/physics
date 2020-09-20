@@ -25,7 +25,7 @@ function clamp(n, min, max) {
 function createNewPoint(connected = false) {
     let newPos = Input.downPos.copy();
     if (activePoint) {
-        if (Input.ctrl || Input.gridSnapOnCreate) {
+        if (Input.ctrl || Input.gridSnapping) {
             let diff = Input.downPos.sub(activePoint.pos).scale(1 / cellSize);
             diff.set(Math.round(diff.x), Math.round(diff.y));
             if (diff.length() < 1) {

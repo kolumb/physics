@@ -23,12 +23,26 @@
                 right: 1em;
                 user-select: none;
             }
+            #EditMenuElem {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                padding: 0;
+                list-style-type: none;
+            }
         </style>
     </head>
     <body>
         <canvas id="Canvas"></canvas>
         <div class="controls">
-            <button id="PauseElem">Pause</button>
+            <button id="PauseElem" title="Space">Pause</button>
+            <ul id="EditMenuElem">
+                <li>
+                    <button id="GridSnapElem" title="Ctrl">
+                        Grid snapping
+                    </button>
+                </li>
+            </ul>
         </div>
         <script src="vector.js"></script>
         <script src="utils.js"></script>

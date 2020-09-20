@@ -3,7 +3,7 @@
 function tick() {
     if (pause) {
         if (Input.drag) {
-            if (Input.gridSnapDrag) {
+            if (Input.gridSnapping) {
                 const shift = Input.pointer.sub(Input.downPos);
                 const currentCell = new Vector(
                     Math.round(shift.x / cellSize),
@@ -20,7 +20,7 @@ function tick() {
                     Input.downCellIndex.addMut(diff);
                 }
             } else if (Input.ctrl) {
-                Input.gridSnapDrag = true;
+                Input.gridSnapping = true;
                 Input.downPos.setFrom(Input.pointer);
                 Input.downCellIndex.set(0, 0);
             }

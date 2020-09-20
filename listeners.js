@@ -48,8 +48,8 @@ const keydownHandler = function(e) {
 const keyupHandler = function(e) {
     if (e.code === "ControlLeft" || e.code === "ControlRight") {
         Input.ctrl = false;
-        if (Input.gridSnapDrag) {
-            Input.gridSnapDrag = false;
+        if (Input.gridSnapping) {
+            Input.gridSnapping = false;
             if (Input.drag) {
                 const fixSnappingOffset = Input.pointer.sub(activePoint.pos);
                 selectedPoints.map((p) => {
@@ -207,7 +207,7 @@ const pointerMoveHandler = function(e) {
                         activePoint = pointedPoint;
                     }
                 } else {
-                    if (Input.ctrl === false) {
+                    if (Input.ctrl === false && Input.gridSnapping === false) {
                         selectedPoints.map((p) => {
                             p.pos.addMut(Input.speed);
                         });
@@ -228,9 +228,11 @@ const pointerMoveHandler = function(e) {
                     const wasNotDragingVector = Input.pointer.sub(
                         Input.downPos
                     );
-                    selectedPoints.map((p) => {
-                        p.pos.addMut(wasNotDragingVector);
-                    });
+                    if (Input.gridSnapping === false) {
+                        selectedPoints.map((p) => {
+                            p.pos.addMut(wasNotDragingVector);
+                        });
+                    }
                     const pointsOfSelectedLines = new Set();
                     selectedLines.map((l) => {
                         pointsOfSelectedLines.add(l.p1);
@@ -327,4 +329,8 @@ const pauseHandler = function(e) {
         alreadyRequestedFrame = true;
         requestAnimationFrame(frame);
     }
+};
+
+const gridSnapHandler = function(e) {
+    Input.gridSnapping = !Input.gridSnapping;
 };
