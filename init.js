@@ -37,3 +37,10 @@ lines.push(new Line(points[1], points[2]));
 lines.push(new Line(points[2], points[0]));
 
 frame();
+
+window.addEventListener("resize", resizeHandler);
+window.addEventListener("keydown", keydownHandler);
+window.addEventListener("keyup", keyupHandler);
+window.addEventListener("pointerdown", pointerDownHandler);
+window.addEventListener("pointermove", pointerMoveHandler);
+window.addEventListener("pointerup", pointerUpHandler);

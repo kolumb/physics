@@ -7,12 +7,11 @@ const resizeHandler = () => {
     canvas.width = width;
 
     floor = ((FLOOR_FACTOR - 1) * height) / FLOOR_FACTOR;
-    if (alreadyRequestedFrame === false) {
+    if (pause && alreadyRequestedFrame === false) {
         alreadyRequestedFrame = true;
         requestAnimationFrame(frame);
     }
 };
-window.addEventListener("resize", resizeHandler);
 
 const keydownHandler = function(e) {
     if (e.code === "Space") {
@@ -47,7 +46,6 @@ const keydownHandler = function(e) {
         requestAnimationFrame(frame);
     }
 };
-window.addEventListener("keydown", keydownHandler);
 
 const keyupHandler = function(e) {
     if (e.code === "ControlLeft" || e.code === "ControlRight") {
@@ -63,7 +61,6 @@ const keyupHandler = function(e) {
         }
     }
 };
-window.addEventListener("keyup", keyupHandler);
 
 const pointerDownHandler = function(e) {
     if (e.button === 2) return;
@@ -317,12 +314,8 @@ const pointerUpHandler = function(e) {
     }
     Input.gridCreation = false;
     Input.lineCreation = false;
-    if (alreadyRequestedFrame === false) {
+    if (pause && alreadyRequestedFrame === false) {
         alreadyRequestedFrame = true;
         requestAnimationFrame(frame);
     }
 };
-
-window.addEventListener("pointerdown", pointerDownHandler);
-window.addEventListener("pointermove", pointerMoveHandler);
-window.addEventListener("pointerup", pointerUpHandler);
