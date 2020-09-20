@@ -16,7 +16,7 @@ const MAX_FORCE = 10;
 const RIGIDITY = 2;
 const selectedPoints = [];
 const selectedLines = [];
-let lastSelectedPoint;
+let activePoint;
 let hoverPoint;
 let cellSize = 50;
 let hoverLine;

@@ -71,7 +71,7 @@ function tick() {
         }
     } else {
         if (Input.drag) {
-            lastSelectedPoint.pos = Input.pointer.add(grabFix);
+            activePoint.pos = Input.pointer.add(grabFix);
         }
         points.map((p) => p.update());
         lines.map((l) => l.update());
@@ -99,6 +99,7 @@ function render() {
     if (pause === true) {
         selectedPoints.map((sp) => sp.highlight());
         selectedLines.map((sl) => sl.highlight());
+        if (activePoint) activePoint.activeHighlight();
     }
     lines.map((l) => l.draw());
     points.map((p) => p.draw());

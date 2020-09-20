@@ -55,9 +55,7 @@ const keyupHandler = function(e) {
         if (Input.gridSnapDrag) {
             Input.gridSnapDrag = false;
             if (Input.drag) {
-                const fixSnappingOffset = Input.pointer.sub(
-                    lastSelectedPoint.pos
-                );
+                const fixSnappingOffset = Input.pointer.sub(activePoint.pos);
                 selectedPoints.map((p) => {
                     p.pos.addMut(fixSnappingOffset);
                 });
@@ -79,7 +77,7 @@ const pointerDownHandler = function(e) {
         if (foundPoint) return;
         if (p.radius > p.pos.dist(Input.downPos)) {
             foundPoint = true;
-            lastSelectedPoint = p;
+            activePoint = p;
         }
     });
     if (foundPoint === false) {
@@ -99,14 +97,12 @@ const pointerDownHandler = function(e) {
                 Input.lineCreation = true;
                 selectedPoints.length = 0;
             } else {
-                const selectionIndex = selectedPoints.indexOf(
-                    lastSelectedPoint
-                );
+                const selectionIndex = selectedPoints.indexOf(activePoint);
                 if (selectionIndex < 0) {
                     if (e.shiftKey === false) {
                         selectedPoints.length = 0;
                     }
-                    selectedPoints.push(lastSelectedPoint);
+                    selectedPoints.push(activePoint);
                 } else {
                     if (e.shiftKey) {
                         Input.downState = false;
@@ -114,8 +110,8 @@ const pointerDownHandler = function(e) {
                             selectionIndex,
                             1
                         )[0];
-                        if (deselectedPoint === lastSelectedPoint) {
-                            lastSelectedPoint =
+                        if (deselectedPoint === activePoint) {
+                            activePoint =
                                 selectedPoints[selectedPoints.length - 1];
                         }
                     }
@@ -143,28 +139,26 @@ const pointerDownHandler = function(e) {
                     Input.gridCreation = true;
                 } else {
                     let newPos;
-                    if (lastSelectedPoint) {
+                    if (activePoint) {
                         if (Input.ctrl) {
                             let diff = Input.downPos
-                                .sub(lastSelectedPoint.pos)
+                                .sub(activePoint.pos)
                                 .scale(1 / cellSize);
                             diff.set(Math.round(diff.x), Math.round(diff.y));
                             if (diff.length() < 1) {
                                 return;
                             }
-                            newPos = lastSelectedPoint.pos.add(
-                                diff.scale(cellSize)
-                            );
+                            newPos = activePoint.pos.add(diff.scale(cellSize));
                         } else {
                             newPos = Input.downPos.copy();
                         }
                     }
                     const newPoint = new Point(newPos);
                     points.push(newPoint);
-                    if (lastSelectedPoint)
-                        lines.push(new Line(newPoint, lastSelectedPoint));
+                    if (activePoint)
+                        lines.push(new Line(newPoint, activePoint));
                     selectedPoints.push(newPoint);
-                    lastSelectedPoint = newPoint;
+                    activePoint = newPoint;
                 }
             } else {
                 if (selectedPoints.length > 0 || selectedLines.length > 0) {
@@ -174,7 +168,7 @@ const pointerDownHandler = function(e) {
                     const newPoint = new Point(Input.downPos.copy());
                     points.push(newPoint);
                     selectedPoints.push(newPoint);
-                    lastSelectedPoint = newPoint;
+                    activePoint = newPoint;
                 }
             }
         }
@@ -184,7 +178,7 @@ const pointerDownHandler = function(e) {
         }
     } else {
         if (foundPoint) {
-            grabFix = lastSelectedPoint.pos.sub(Input.downPos);
+            grabFix = activePoint.pos.sub(Input.downPos);
             Input.drag = true;
         } else {
             Input.downState = false;
@@ -232,9 +226,9 @@ const pointerMoveHandler = function(e) {
                             pointedPoint = p;
                         }
                     });
-                    if (pointedPoint && pointedPoint !== lastSelectedPoint) {
+                    if (pointedPoint && pointedPoint !== activePoint) {
                         const p1 = pointedPoint;
-                        const p2 = lastSelectedPoint;
+                        const p2 = activePoint;
                         let found = false;
                         lines.map((l) => {
                             if (
@@ -247,7 +241,7 @@ const pointerMoveHandler = function(e) {
                         if (found === false) {
                             lines.push(new Line(p1, p2));
                         }
-                        lastSelectedPoint = pointedPoint;
+                        activePoint = pointedPoint;
                     }
                 } else {
                     if (Input.ctrl === false) {
