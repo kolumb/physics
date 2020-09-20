@@ -48,14 +48,12 @@ const keydownHandler = function(e) {
 const keyupHandler = function(e) {
     if (e.code === "ControlLeft" || e.code === "ControlRight") {
         Input.ctrl = false;
-        if (Input.gridSnapping) {
+        if (Input.drag && Input.gridSnapping) {
             Input.gridSnapping = false;
-            if (Input.drag) {
-                const fixSnappingOffset = Input.pointer.sub(activePoint.pos);
-                selectedPoints.map((p) => {
-                    p.pos.addMut(fixSnappingOffset);
-                });
-            }
+            const fixSnappingOffset = Input.pointer.sub(activePoint.pos);
+            selectedPoints.map((p) => {
+                p.pos.addMut(fixSnappingOffset);
+            });
         }
     }
 };

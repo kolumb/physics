@@ -42,8 +42,8 @@ window.addEventListener("resize", resizeHandler);
 window.addEventListener("keydown", keydownHandler);
 window.addEventListener("keyup", keyupHandler);
 canvas.addEventListener("pointerdown", pointerDownHandler);
-canvas.addEventListener("pointermove", pointerMoveHandler);
-canvas.addEventListener("pointerup", pointerUpHandler);
+window.addEventListener("pointermove", pointerMoveHandler);
+window.addEventListener("pointerup", pointerUpHandler);
 document.querySelector("#PauseElem").addEventListener("click", pauseHandler);
 document
     .querySelector("#GridSnapElem")
