@@ -46,7 +46,7 @@ class Point {
         ctx.save();
         ctx.beginPath();
         ctx.arc(this.pos.x, this.pos.y, this.radius + 11, 0, Math.PI * 2, true);
-        ctx.strokeStyle = "#ee4400";
+        ctx.strokeStyle = "#ee6600";
         ctx.lineWidth = 2;
         ctx.stroke();
         ctx.restore();

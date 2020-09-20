@@ -132,44 +132,12 @@ const pointerDownHandler = function(e) {
                 }
             }
         } else {
-            if (e.shiftKey) {
-                selectedLines.length = 0;
-                selectedPoints.length = 0;
-                if (e.altKey) {
-                    Input.gridCreation = true;
-                } else {
-                    let newPos;
-                    if (activePoint) {
-                        if (Input.ctrl) {
-                            let diff = Input.downPos
-                                .sub(activePoint.pos)
-                                .scale(1 / cellSize);
-                            diff.set(Math.round(diff.x), Math.round(diff.y));
-                            if (diff.length() < 1) {
-                                return;
-                            }
-                            newPos = activePoint.pos.add(diff.scale(cellSize));
-                        } else {
-                            newPos = Input.downPos.copy();
-                        }
-                    }
-                    const newPoint = new Point(newPos);
-                    points.push(newPoint);
-                    if (activePoint)
-                        lines.push(new Line(newPoint, activePoint));
-                    selectedPoints.push(newPoint);
-                    activePoint = newPoint;
-                }
+            selectedLines.length = 0;
+            selectedPoints.length = 0;
+            if (e.shiftKey && e.altKey) {
+                Input.gridCreation = true;
             } else {
-                if (selectedPoints.length > 0 || selectedLines.length > 0) {
-                    selectedPoints.length = 0;
-                    selectedLines.length = 0;
-                } else {
-                    const newPoint = new Point(Input.downPos.copy());
-                    points.push(newPoint);
-                    selectedPoints.push(newPoint);
-                    activePoint = newPoint;
-                }
+                createNewPoint(e.shiftKey);
             }
         }
         if (alreadyRequestedFrame === false) {

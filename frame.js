@@ -1,5 +1,25 @@
 "use strict";
 
+function createNewPoint(connected = false) {
+    let newPos = Input.downPos.copy();
+    if (activePoint) {
+        if (Input.ctrl || Input.gridSnapOnCreate) {
+            let diff = Input.downPos.sub(activePoint.pos).scale(1 / cellSize);
+            diff.set(Math.round(diff.x), Math.round(diff.y));
+            if (diff.length() < 1) {
+                return;
+            }
+            newPos = activePoint.pos.add(diff.scale(cellSize));
+        }
+    }
+    const newPoint = new Point(newPos);
+    points.push(newPoint);
+    if (activePoint && (connected || Input.createConnected))
+        lines.push(new Line(newPoint, activePoint));
+    selectedPoints.push(newPoint);
+    activePoint = newPoint;
+}
+
 function connectSelectedPoints() {
     for (let i = 0; i < selectedPoints.length; i++) {
         for (let j = i + 1; j < selectedPoints.length; j++) {
