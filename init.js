@@ -46,6 +46,12 @@ window.addEventListener("pointermove", pointerMoveHandler);
 window.addEventListener("pointerup", pointerUpHandler);
 document.querySelector("#PauseElem").addEventListener("click", pauseHandler);
 document
+    .querySelector("#SelectAllElem")
+    .addEventListener("click", selectAllPoints);
+document
+    .querySelector("#DeselectAllElem")
+    .addEventListener("click", deselectAll);
+document
     .querySelector("#GridSnapElem")
     .addEventListener("click", gridSnapHandler);
 document

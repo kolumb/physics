@@ -23,6 +23,12 @@ const keydownHandler = function(e) {
             case "ControlRight":
                 Input.ctrl = true;
                 break;
+            case "KeyA":
+                selectAllPoints();
+                break;
+            case "KeyD":
+                deselectAll();
+                break;
             case "KeyF":
                 connectSelectedPoints();
                 break;
@@ -132,8 +138,7 @@ const pointerDownHandler = function(e) {
                 }
             }
         } else {
-            selectedLines.length = 0;
-            selectedPoints.length = 0;
+            deselectAll();
             if (e.ctrlKey && e.shiftKey) {
                 Input.gridCreation = true;
             } else {
@@ -345,8 +350,7 @@ const gridSnapHandler = function(e) {
 const gridCreateHandler = function(e) {
     Input.gridCreation = !Input.gridCreation;
     if (Input.gridCreation) {
-        selectedPoints.length = 0;
-        selectedLines.length = 0;
+        deselectAll();
     }
 };
 const LatticeCreateHandler = function(e) {

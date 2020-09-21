@@ -22,6 +22,15 @@ function clamp(n, min, max) {
     return Math.max(Math.min(n, max), min);
 }
 
+function selectAllPoints() {
+    deselectAll();
+    points.map((p) => selectedPoints.push(p));
+}
+function deselectAll() {
+    selectedPoints.length = 0;
+    selectedLines.length = 0;
+}
+
 function createNewPoint(connected = false) {
     let newPos = Input.downPos.copy();
     if (activePoint) {
@@ -100,7 +109,6 @@ function deleteSelected() {
             selectedPoints.indexOf(l.p1) < 0 && selectedPoints.indexOf(l.p2) < 0
     );
     points = points.filter((p) => selectedPoints.indexOf(p) < 0);
-    selectedPoints.length = 0;
     lines = lines.filter((l) => selectedLines.indexOf(l) < 0);
-    selectedLines.length = 0;
+    deselectAll();
 }
