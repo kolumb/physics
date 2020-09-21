@@ -99,8 +99,7 @@ const pointerDownHandler = function(e) {
         if (Input.gridCreation) return;
         if (foundPoint) {
             selectedLines.length = 0;
-            if (e.altKey) {
-                Input.lineCreation = true;
+            if (e.altKey || Input.createConnections) {
                 selectedPoints.length = 0;
             } else {
                 const selectionIndex = selectedPoints.indexOf(activePoint);
@@ -140,6 +139,7 @@ const pointerDownHandler = function(e) {
         } else {
             deselectAll();
             if (e.ctrlKey && e.shiftKey) {
+                Input.drag = true;
                 Input.gridCreation = true;
             } else {
                 createNewPoint(e.altKey);
@@ -191,7 +191,22 @@ const pointerMoveHandler = function(e) {
     if (pause) {
         if (Input.downState) {
             if (Input.drag) {
-                if (Input.lineCreation) {
+                if (Input.ctrl === false && Input.gridSnapping === false) {
+                    selectedPoints.map((p) => {
+                        p.pos.addMut(Input.speed);
+                    });
+                }
+                const pointsOfSelectedLines = new Set();
+                selectedLines.map((l) => {
+                    pointsOfSelectedLines.add(l.p1);
+                    pointsOfSelectedLines.add(l.p2);
+                });
+                for (let p of pointsOfSelectedLines) p.pos.addMut(Input.speed);
+            } else {
+                if (
+                    (e.altKey || Input.createConnections) &&
+                    Input.gridCreation === false
+                ) {
                     let pointedPoint;
                     points.map((p) => {
                         if (pointedPoint) return;
@@ -216,22 +231,7 @@ const pointerMoveHandler = function(e) {
                         }
                         activePoint = pointedPoint;
                     }
-                } else {
-                    if (Input.ctrl === false && Input.gridSnapping === false) {
-                        selectedPoints.map((p) => {
-                            p.pos.addMut(Input.speed);
-                        });
-                    }
-                    const pointsOfSelectedLines = new Set();
-                    selectedLines.map((l) => {
-                        pointsOfSelectedLines.add(l.p1);
-                        pointsOfSelectedLines.add(l.p2);
-                    });
-                    for (let p of pointsOfSelectedLines)
-                        p.pos.addMut(Input.speed);
-                }
-            } else {
-                if (Input.ctrl) {
+                } else if (Input.ctrl) {
                     Input.drag = true;
                 } else if (Input.downPos.dist(Input.pointer) > DRAG_THRESHOLD) {
                     Input.drag = true;
@@ -288,7 +288,7 @@ const pointerUpHandler = function(e) {
             }
         }
         activePoint = newPoints[0][0];
-        if (e.altKey || Input.createConnected) {
+        if (e.altKey || Input.createConnections) {
             for (let i = 0; i <= Math.abs(gridWidth); i++) {
                 for (let j = 0; j <= Math.abs(gridHeight); j++) {
                     if (newPoints[i + 1]) {
@@ -320,12 +320,12 @@ const pointerUpHandler = function(e) {
                 }
             }
         }
+        Input.gridSnapping = false;
         Input.gridCreation = false;
-        Input.createConnected = false;
+        Input.createConnections = false;
     }
     Input.downState = false;
     Input.drag = false;
-    Input.lineCreation = false;
     if (pause && alreadyRequestedFrame === false) {
         alreadyRequestedFrame = true;
         requestAnimationFrame(frame);
@@ -355,10 +355,10 @@ const gridCreateHandler = function(e) {
 };
 const LatticeCreateHandler = function(e) {
     if (Input.gridCreation) {
-        Input.createConnected = true;
+        Input.createConnections = true;
     }
 };
 
 const connectedModeHandler = function(e) {
-    Input.createConnected = !Input.createConnected;
+    Input.createConnections = !Input.createConnections;
 };

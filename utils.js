@@ -45,7 +45,7 @@ function createNewPoint(connected = false) {
     }
     const newPoint = new Point(newPos);
     points.push(newPoint);
-    if (activePoint && (connected || Input.createConnected))
+    if (activePoint && (connected || Input.createConnections))
         lines.push(new Line(newPoint, activePoint));
     selectedPoints.push(newPoint);
     activePoint = newPoint;

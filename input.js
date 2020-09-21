@@ -5,10 +5,9 @@ class Input {
     static downState = false;
     static drag = false;
     static ctrl = false;
-    static createConnected = false;
+    static createConnections = false;
     static showTension = true;
     static gridSnapping = false;
     static downCellIndex = new Vector();
     static gridCreation = false;
-    static lineCreation = false;
 }
