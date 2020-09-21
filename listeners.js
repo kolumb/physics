@@ -90,6 +90,7 @@ const pointerDownHandler = function(e) {
         });
     }
     if (pause) {
+        if (Input.gridCreation) return;
         if (foundPoint) {
             selectedLines.length = 0;
             if (e.altKey) {
@@ -254,9 +255,7 @@ const pointerMoveHandler = function(e) {
     }
 };
 const pointerUpHandler = function(e) {
-    Input.downState = false;
-    Input.drag = false;
-    if (Input.gridCreation) {
+    if (Input.drag && Input.gridCreation) {
         let gridWidth = Math.round(
             (Input.pointer.x - Input.downPos.x) / cellSize
         );
@@ -316,8 +315,10 @@ const pointerUpHandler = function(e) {
                 }
             }
         }
+        Input.gridCreation = false;
     }
-    Input.gridCreation = false;
+    Input.downState = false;
+    Input.drag = false;
     Input.lineCreation = false;
     if (pause && alreadyRequestedFrame === false) {
         alreadyRequestedFrame = true;
@@ -338,6 +339,14 @@ const pauseHandler = function(e) {
 
 const gridSnapHandler = function(e) {
     Input.gridSnapping = !Input.gridSnapping;
+};
+
+const gridCreateHandler = function(e) {
+    Input.gridCreation = !Input.gridCreation;
+    if (Input.gridCreation) {
+        selectedPoints.length = 0;
+        selectedLines.length = 0;
+    }
 };
 
 const connectedModeHandler = function(e) {

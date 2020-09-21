@@ -49,6 +49,9 @@ document
     .querySelector("#GridSnapElem")
     .addEventListener("click", gridSnapHandler);
 document
+    .querySelector("#GridCreateElem")
+    .addEventListener("click", gridCreateHandler);
+document
     .querySelector("#ConnectedModeElem")
     .addEventListener("click", connectedModeHandler);
 document

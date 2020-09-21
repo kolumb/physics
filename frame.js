@@ -41,7 +41,7 @@ function render() {
     ctx.fillStyle = "grey";
     ctx.fillRect(0, floor, width, height / FLOOR_FACTOR);
     ctx.fillText("FPS: " + FPS, 10, 15);
-    if (Input.gridCreation) {
+    if (Input.drag && Input.gridCreation) {
         ctx.strokeStyle = "blue";
         let gridWidth =
             cellSize *
