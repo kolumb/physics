@@ -4,7 +4,7 @@ class Point {
         this.vel = new Vector();
         this.radius = radius;
         this.color = color;
-        this.originalColor = color;
+        this.hidden = false;
         this.fix = new Vector();
         this.lastFix = new Vector();
     }
@@ -26,6 +26,7 @@ class Point {
     }
 
     draw() {
+        if (this.hidden) return;
         ctx.save();
         ctx.beginPath();
         ctx.arc(this.pos.x, this.pos.y, this.radius, 0, Math.PI * 2);

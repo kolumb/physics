@@ -4,7 +4,7 @@ class Line {
         this.p2 = p2;
         this.length = this.p1.pos.dist(this.p2.pos);
         this.color = color;
-        this.originalColor = color;
+        this.hidden = false;
         this.width = width;
     }
     update() {
@@ -17,6 +17,7 @@ class Line {
         this.p2.fix.addMut(fix2);
     }
     draw() {
+        if (this.hidden) return;
         ctx.save();
         ctx.beginPath();
         ctx.moveTo(this.p1.pos.x, this.p1.pos.y);
