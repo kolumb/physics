@@ -52,6 +52,9 @@ document
     .querySelector("#GridCreateElem")
     .addEventListener("click", gridCreateHandler);
 document
+    .querySelector("#LatticeCreateElem")
+    .addEventListener("click", LatticeCreateHandler);
+document
     .querySelector("#ConnectedModeElem")
     .addEventListener("click", connectedModeHandler);
 document

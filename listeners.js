@@ -316,6 +316,7 @@ const pointerUpHandler = function(e) {
             }
         }
         Input.gridCreation = false;
+        Input.createConnected = false;
     }
     Input.downState = false;
     Input.drag = false;
@@ -346,6 +347,11 @@ const gridCreateHandler = function(e) {
     if (Input.gridCreation) {
         selectedPoints.length = 0;
         selectedLines.length = 0;
+    }
+};
+const LatticeCreateHandler = function(e) {
+    if (Input.gridCreation) {
+        Input.createConnected = true;
     }
 };
 
