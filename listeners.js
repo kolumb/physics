@@ -26,6 +26,9 @@ const keydownHandler = function(e) {
             case "KeyF":
                 connectSelectedPoints();
                 break;
+            case "KeyT":
+                Input.showTension = !Input.showTension;
+                break;
             case "KeyR":
                 relaxLines();
                 break;

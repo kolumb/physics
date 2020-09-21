@@ -54,6 +54,9 @@ document
 document
     .querySelector("#ConnectSelectedElem")
     .addEventListener("click", connectSelectedPoints);
+document
+    .querySelector("#TensionElem")
+    .addEventListener("click", () => (Input.showTension = !Input.showTension));
 document.querySelector("#RelaxLinesElem").addEventListener("click", relaxLines);
 document.querySelector("#HideElem").addEventListener("click", hide);
 document.querySelector("#UnhideElem").addEventListener("click", unhide);
