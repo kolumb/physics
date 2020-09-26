@@ -64,6 +64,12 @@ document
     .querySelector("#LatticeCreateElem")
     .addEventListener("click", LatticeCreateHandler);
 document
+    .querySelector("#CreateConnectedElem")
+    .addEventListener(
+        "click",
+        () => (Input.createConnectedPoint = !Input.createConnectedPoint)
+    );
+document
     .querySelector("#DrawConnectionsElem")
     .addEventListener("click", drawConnectionsHandler);
 document

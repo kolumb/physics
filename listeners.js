@@ -150,7 +150,7 @@ const pointerDownHandler = function(e) {
                 Input.gridCreation = true;
                 if (e.altKey) Input.latticeCreation = true;
             } else {
-                createNewPoint(e.altKey);
+                createNewPoint(e.altKey || Input.createConnectedPoint);
             }
         }
         if (alreadyRequestedFrame === false) {
