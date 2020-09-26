@@ -61,8 +61,8 @@ document
     .querySelector("#LatticeCreateElem")
     .addEventListener("click", LatticeCreateHandler);
 document
-    .querySelector("#ConnectedModeElem")
-    .addEventListener("click", connectedModeHandler);
+    .querySelector("#DrawConnectionsElem")
+    .addEventListener("click", drawConnectionsHandler);
 document
     .querySelector("#ConnectSelectedElem")
     .addEventListener("click", connectSelectedPoints);

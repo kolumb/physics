@@ -96,10 +96,13 @@ const pointerDownHandler = function(e) {
         });
     }
     if (pause) {
-        if (Input.gridCreation) return;
+        if (Input.gridCreation) {
+            deselectAll();
+            return;
+        }
         if (foundPoint) {
             selectedLines.length = 0;
-            if (e.altKey || Input.createConnections) {
+            if (e.altKey || Input.drawConnections) {
                 selectedPoints.length = 0;
             } else {
                 const selectionIndex = selectedPoints.indexOf(activePoint);
@@ -141,6 +144,7 @@ const pointerDownHandler = function(e) {
             if (e.ctrlKey && e.shiftKey) {
                 Input.drag = true;
                 Input.gridCreation = true;
+                if (e.altKey) Input.latticeCreation = true;
             } else {
                 createNewPoint(e.altKey);
             }
@@ -204,7 +208,7 @@ const pointerMoveHandler = function(e) {
                 for (let p of pointsOfSelectedLines) p.pos.addMut(Input.speed);
             } else {
                 if (
-                    (e.altKey || Input.createConnections) &&
+                    (e.altKey || Input.drawConnections) &&
                     Input.gridCreation === false
                 ) {
                     let pointedPoint;
@@ -288,7 +292,7 @@ const pointerUpHandler = function(e) {
             }
         }
         activePoint = newPoints[0][0];
-        if (e.altKey || Input.createConnections) {
+        if (e.altKey || Input.latticeCreation) {
             for (let i = 0; i <= Math.abs(gridWidth); i++) {
                 for (let j = 0; j <= Math.abs(gridHeight); j++) {
                     if (newPoints[i + 1]) {
@@ -322,7 +326,7 @@ const pointerUpHandler = function(e) {
         }
         Input.gridSnapping = false;
         Input.gridCreation = false;
-        Input.createConnections = false;
+        Input.latticeCreation = false;
     }
     Input.downState = false;
     Input.drag = false;
@@ -349,16 +353,15 @@ const gridSnapHandler = function(e) {
 
 const gridCreateHandler = function(e) {
     Input.gridCreation = !Input.gridCreation;
-    if (Input.gridCreation) {
-        deselectAll();
-    }
 };
 const LatticeCreateHandler = function(e) {
     if (Input.gridCreation) {
-        Input.createConnections = true;
+        Input.latticeCreation = !Input.latticeCreation;
+    } else {
+        Input.latticeCreation = false;
     }
 };
 
-const connectedModeHandler = function(e) {
-    Input.createConnections = !Input.createConnections;
+const drawConnectionsHandler = function(e) {
+    Input.drawConnections = !Input.drawConnections;
 };
