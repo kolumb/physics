@@ -41,8 +41,9 @@ function render() {
     ctx.fillStyle = "grey";
     ctx.fillRect(0, floor, width, height / FLOOR_FACTOR);
     ctx.fillText("FPS: " + FPS, 10, 15);
+    ctx.strokeStyle = "blue";
+    ctx.lineWidth = 2;
     if (Input.drag && Input.gridCreation) {
-        ctx.strokeStyle = "blue";
         let gridWidth =
             cellSize *
             Math.round((Input.pointer.x - Input.downPos.x) / cellSize);
@@ -50,6 +51,11 @@ function render() {
             cellSize *
             Math.round((Input.pointer.y - Input.downPos.y) / cellSize);
         ctx.strokeRect(Input.downPos.x, Input.downPos.y, gridWidth, gridHeight);
+    } else if (Input.downState && Input.drawConnections && activePoint) {
+        ctx.beginPath();
+        ctx.moveTo(activePoint.pos.x, activePoint.pos.y);
+        ctx.lineTo(Input.pointer.x, Input.pointer.y);
+        ctx.stroke();
     }
     ctx.restore();
     if (hoverLine) hoverLine.highlight();

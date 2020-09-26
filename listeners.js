@@ -151,6 +151,7 @@ const pointerDownHandler = function(e) {
                 if (e.altKey) Input.latticeCreation = true;
             } else {
                 createNewPoint(e.altKey || Input.createConnectedPoint);
+                Input.downState = false;
             }
         }
         if (alreadyRequestedFrame === false) {
