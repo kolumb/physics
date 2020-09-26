@@ -145,10 +145,14 @@ const pointerDownHandler = function(e) {
             }
         } else {
             deselectAll();
-            if (e.ctrlKey && e.shiftKey) {
-                Input.drag = true;
-                Input.gridCreation = true;
-                if (e.altKey) Input.latticeCreation = true;
+            if (e.shiftKey) {
+                if (e.ctrlKey) {
+                    Input.drag = true;
+                    Input.gridCreation = true;
+                    if (e.altKey) Input.latticeCreation = true;
+                } else {
+                    Input.boxSelection = true;
+                }
             } else {
                 createNewPoint(e.altKey || Input.createConnectedPoint);
                 Input.downState = false;
@@ -214,7 +218,8 @@ const pointerMoveHandler = function(e) {
             } else {
                 if (
                     (e.altKey || Input.drawConnections) &&
-                    Input.gridCreation === false
+                    Input.gridCreation === false &&
+                    Input.boxSelection === false
                 ) {
                     let pointedPoint;
                     points.map((p) => {
@@ -332,6 +337,26 @@ const pointerUpHandler = function(e) {
         Input.gridSnapping = false;
         Input.gridCreation = false;
         Input.latticeCreation = false;
+    } else if (Input.boxSelection) {
+        Input.boxSelection = false;
+        const min = new Vector(
+            Math.min(Input.pointer.x, Input.downPos.x),
+            Math.min(Input.pointer.y, Input.downPos.y)
+        );
+        const max = new Vector(
+            Math.max(Input.pointer.x, Input.downPos.x),
+            Math.max(Input.pointer.y, Input.downPos.y)
+        );
+        points.map((p) => {
+            if (
+                p.pos.x > min.x &&
+                p.pos.x < max.x &&
+                p.pos.y > min.y &&
+                p.pos.y < max.y
+            ) {
+                selectedPoints.push(p);
+            }
+        });
     }
     Input.downState = false;
     Input.drag = false;

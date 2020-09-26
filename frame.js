@@ -51,6 +51,16 @@ function render() {
             cellSize *
             Math.round((Input.pointer.y - Input.downPos.y) / cellSize);
         ctx.strokeRect(Input.downPos.x, Input.downPos.y, gridWidth, gridHeight);
+    } else if (Input.boxSelection) {
+        ctx.strokeStyle = "grey";
+        ctx.setLineDash([5, 10]);
+        const selectionBox = Input.pointer.sub(Input.downPos);
+        ctx.strokeRect(
+            Input.downPos.x,
+            Input.downPos.y,
+            selectionBox.x,
+            selectionBox.y
+        );
     } else if (Input.downState && Input.drawConnections && activePoint) {
         ctx.beginPath();
         ctx.moveTo(activePoint.pos.x, activePoint.pos.y);
