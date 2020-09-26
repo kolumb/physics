@@ -145,14 +145,12 @@ const pointerDownHandler = function(e) {
             }
         } else {
             deselectAll();
-            if (e.shiftKey) {
-                if (e.ctrlKey) {
-                    Input.drag = true;
-                    Input.gridCreation = true;
-                    if (e.altKey) Input.latticeCreation = true;
-                } else {
-                    Input.boxSelection = true;
-                }
+            if (e.shiftKey && e.ctrlKey) {
+                Input.drag = true;
+                Input.gridCreation = true;
+                if (e.altKey) Input.latticeCreation = true;
+            } else if (e.shiftKey || Input.boxSelection) {
+                Input.boxSelection = true;
             } else {
                 createNewPoint(e.altKey || Input.createConnectedPoint);
                 Input.downState = false;

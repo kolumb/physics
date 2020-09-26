@@ -46,6 +46,12 @@ window.addEventListener("pointermove", pointerMoveHandler);
 window.addEventListener("pointerup", pointerUpHandler);
 document.querySelector("#PauseElem").addEventListener("click", pauseHandler);
 document
+    .querySelector("#BoxSelectionElem")
+    .addEventListener(
+        "click",
+        () => (Input.boxSelection = !Input.boxSelection)
+    );
+document
     .querySelector("#SelectAllPointsElem")
     .addEventListener("click", selectAllPoints);
 document

@@ -51,7 +51,7 @@ function render() {
             cellSize *
             Math.round((Input.pointer.y - Input.downPos.y) / cellSize);
         ctx.strokeRect(Input.downPos.x, Input.downPos.y, gridWidth, gridHeight);
-    } else if (Input.boxSelection) {
+    } else if (Input.downState && Input.boxSelection) {
         ctx.strokeStyle = "grey";
         ctx.setLineDash([5, 10]);
         const selectionBox = Input.pointer.sub(Input.downPos);
