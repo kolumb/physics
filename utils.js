@@ -26,6 +26,10 @@ function selectAllPoints() {
     deselectAll();
     points.map((p) => selectedPoints.push(p));
 }
+function selectAllLines() {
+    deselectAll();
+    lines.map((l) => selectedLines.push(l));
+}
 function deselectAll() {
     selectedPoints.length = 0;
     selectedLines.length = 0;

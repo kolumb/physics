@@ -24,7 +24,11 @@ const keydownHandler = function(e) {
                 Input.ctrl = true;
                 break;
             case "KeyA":
-                selectAllPoints();
+                if (e.altKey) {
+                    selectAllLines();
+                } else {
+                    selectAllPoints();
+                }
                 break;
             case "KeyD":
                 deselectAll();

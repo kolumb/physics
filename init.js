@@ -46,8 +46,11 @@ window.addEventListener("pointermove", pointerMoveHandler);
 window.addEventListener("pointerup", pointerUpHandler);
 document.querySelector("#PauseElem").addEventListener("click", pauseHandler);
 document
-    .querySelector("#SelectAllElem")
+    .querySelector("#SelectAllPointsElem")
     .addEventListener("click", selectAllPoints);
+document
+    .querySelector("#SelectAllLinesElem")
+    .addEventListener("click", selectAllLines);
 document
     .querySelector("#DeselectAllElem")
     .addEventListener("click", deselectAll);
