@@ -45,12 +45,10 @@ canvas.addEventListener("pointerdown", pointerDownHandler);
 window.addEventListener("pointermove", pointerMoveHandler);
 window.addEventListener("pointerup", pointerUpHandler);
 document.querySelector("#PauseElem").addEventListener("click", pauseHandler);
-document
-    .querySelector("#BoxSelectionElem")
-    .addEventListener(
-        "click",
-        () => (Input.boxSelection = !Input.boxSelection)
-    );
+document.querySelector("#BoxSelectionElem").addEventListener("click", () => {
+    Input.boxSelection = !Input.boxSelection;
+    BoxSelectionElem.classList.toggle("enabled");
+});
 document
     .querySelector("#SelectAllPointsElem")
     .addEventListener("click", selectAllPoints);
@@ -69,21 +67,20 @@ document
 document
     .querySelector("#LatticeCreateElem")
     .addEventListener("click", LatticeCreateHandler);
-document
-    .querySelector("#CreateConnectedElem")
-    .addEventListener(
-        "click",
-        () => (Input.createConnectedPoint = !Input.createConnectedPoint)
-    );
+document.querySelector("#CreateConnectedElem").addEventListener("click", () => {
+    Input.createConnectedPoint = !Input.createConnectedPoint;
+    CreateConnectedElem.classList.toggle("enabled");
+});
 document
     .querySelector("#DrawConnectionsElem")
     .addEventListener("click", drawConnectionsHandler);
 document
     .querySelector("#ConnectSelectedElem")
     .addEventListener("click", connectSelectedPoints);
-document
-    .querySelector("#TensionElem")
-    .addEventListener("click", () => (Input.showTension = !Input.showTension));
+document.querySelector("#TensionElem").addEventListener("click", () => {
+    Input.showTension = !Input.showTension;
+    TensionElem.classList.toggle("enabled");
+});
 document.querySelector("#RelaxLinesElem").addEventListener("click", relaxLines);
 document.querySelector("#HideElem").addEventListener("click", hide);
 document.querySelector("#UnhideElem").addEventListener("click", unhide);

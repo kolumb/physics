@@ -38,6 +38,7 @@ const keydownHandler = function(e) {
                 break;
             case "KeyT":
                 Input.showTension = !Input.showTension;
+                TensionElem.classList.toggle("enabled");
                 break;
             case "KeyR":
                 relaxLines();
@@ -66,6 +67,7 @@ const keyupHandler = function(e) {
         Input.ctrl = false;
         if (Input.drag && Input.gridSnapping) {
             Input.gridSnapping = false;
+            GridSnapElem.classList.remove("enabled");
             const fixSnappingOffset = Input.pointer.sub(activePoint.pos);
             selectedPoints.map((p) => {
                 p.pos.addMut(fixSnappingOffset);
@@ -148,9 +150,14 @@ const pointerDownHandler = function(e) {
             if (e.shiftKey && e.ctrlKey) {
                 Input.drag = true;
                 Input.gridCreation = true;
-                if (e.altKey) Input.latticeCreation = true;
+                GridCreateElem.classList.add("enabled");
+                if (e.altKey) {
+                    Input.latticeCreation = true;
+                    LatticeCreateElem.classList.add("enabled");
+                }
             } else if (e.shiftKey || Input.boxSelection) {
                 Input.boxSelection = true;
+                BoxSelectionElem.classList.add("enabled");
             } else {
                 createNewPoint(e.altKey || Input.createConnectedPoint);
                 Input.downState = false;
@@ -335,8 +342,12 @@ const pointerUpHandler = function(e) {
         Input.gridSnapping = false;
         Input.gridCreation = false;
         Input.latticeCreation = false;
+        GridSnapElem.classList.remove("enabled");
+        GridCreateElem.classList.remove("enabled");
+        LatticeCreateElem.classList.remove("enabled");
     } else if (Input.boxSelection) {
         Input.boxSelection = false;
+        BoxSelectionElem.classList.remove("enabled");
         const min = new Vector(
             Math.min(Input.pointer.x, Input.downPos.x),
             Math.min(Input.pointer.y, Input.downPos.y)
@@ -366,6 +377,7 @@ const pointerUpHandler = function(e) {
 
 const pauseHandler = function(e) {
     pause = !pause;
+    PauseElem.classList.toggle("enabled");
     Input.drag = false;
     Input.downState = false;
     e.preventDefault();
@@ -377,19 +389,24 @@ const pauseHandler = function(e) {
 
 const gridSnapHandler = function(e) {
     Input.gridSnapping = !Input.gridSnapping;
+    GridSnapElem.classList.toggle("enabled");
 };
 
 const gridCreateHandler = function(e) {
     Input.gridCreation = !Input.gridCreation;
+    GridCreateElem.classList.toggle("enabled");
 };
 const LatticeCreateHandler = function(e) {
     if (Input.gridCreation) {
         Input.latticeCreation = !Input.latticeCreation;
+        LatticeCreateElem.classList.toggle("enabled");
     } else {
         Input.latticeCreation = false;
+        LatticeCreateElem.classList.remove("enabled");
     }
 };
 
 const drawConnectionsHandler = function(e) {
     Input.drawConnections = !Input.drawConnections;
+    DrawConnectionsElem.classList.toggle("enabled");
 };

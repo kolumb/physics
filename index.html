@@ -54,12 +54,24 @@
             button:hover {
                 background: rgba(20, 30, 70, 0.3);
             }
+            .enabled {
+                background: rgba(161, 112, 235, 0.67);
+            }
             .controls button:hover g {
                 fill: white;
             }
             .controls button:hover g.stroke {
                 fill: none;
                 stroke: white;
+            }
+            #PlayIcon {
+                display: none;
+            }
+            #PauseElem.enabled #PlayIcon {
+                display: inline-block;
+            }
+            #PauseElem.enabled #PauseIcon {
+                display: none;
             }
             .hide {
                 display: none;
@@ -75,8 +87,8 @@
                         <rect x="15" y="10" width="25" height="80"></rect>
                         <rect x="60" y="10" width="25" height="80"></rect>
                     </g>
-                    <g id="PlayIcon" class="hide">
-                        <polygon points="25 10, 95 50, 25 90"></polygon>
+                    <g id="PlayIcon">
+                        <polygon points="20 10, 90 50, 20 90"></polygon>
                     </g>
                 </svg>
             </button>
@@ -283,7 +295,11 @@
                             </g>
                         </svg>
                     </button>
-                    <button id="TensionElem" title="Tension of lines (T)">
+                    <button
+                        id="TensionElem"
+                        class="enabled"
+                        title="Tension of lines (T)"
+                    >
                         <svg viewBox="0 0 100 100">
                             <g id="TensionIcon" class="stroke">
                                 <circle cx="15" cy="75" r="5"></circle>
@@ -323,7 +339,7 @@
                 </li>
                 <li>
                     <button id="DeleteElem" title="Delete (X, Delete)">
-                        <svg viewBox="0 0 100 100">
+                        <svg viewBox="-10 -10 120 120">
                             <g id="DeleteIcon" class="stroke">
                                 <polyline
                                     points="35 23, 40 13, 60 13, 65 23"

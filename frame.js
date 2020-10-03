@@ -21,6 +21,7 @@ function tick() {
                 }
             } else if (Input.ctrl) {
                 Input.gridSnapping = true;
+                GridSnapElem.classList.add("enabled");
                 Input.downPos.setFrom(Input.pointer);
                 Input.downCellIndex.set(0, 0);
             }
