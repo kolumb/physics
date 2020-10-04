@@ -22,9 +22,55 @@ const keydownHandler = function(e) {
             case "ControlLeft":
             case "ControlRight":
                 Input.ctrl = true;
+                if (Input.drag) {
+                    Input.downPos.setFrom(Input.pointer);
+                    Input.downCellIndex.set(0, 0);
+                } else if (e.shiftKey) {
+                    BoxSelectionElem.classList.remove("enabled");
+                    GridCreateElem.classList.add("enabled");
+                    LatticeCreateElem.disabled = false;
+                    if (Input.alt) {
+                        LatticeCreateElem.classList.add("enabled");
+                    }
+                }
+                GridSnapElem.classList.add("enabled");
+                break;
+            case "AltLeft":
+            case "AltRight":
+                Input.alt = true;
+                if (selectedPoints.length === 0) {
+                    Input.drag = false;
+                }
+                if (e.shiftKey) {
+                    if (e.shiftKey && Input.ctrl) {
+                        LatticeCreateElem.classList.add("enabled");
+                    }
+                } else {
+                    CreateConnectedElem.classList.add("enabled");
+                    DrawConnectionsElem.classList.add("enabled");
+                }
+                break;
+            case "ShiftLeft":
+            case "ShiftRight":
+                if (Input.ctrl) {
+                    GridCreateElem.classList.add("enabled");
+                    LatticeCreateElem.disabled = false;
+                    if (Input.alt) {
+                        LatticeCreateElem.classList.add("enabled");
+                    }
+                    BoxSelectionElem.classList.remove("enabled");
+                } else {
+                    BoxSelectionElem.classList.add("enabled");
+                }
+                if (Input.alt) {
+                    if (Input.createConnectedPoint === false)
+                        CreateConnectedElem.classList.remove("enabled");
+                    if (Input.drawConnections === false)
+                        DrawConnectionsElem.classList.remove("enabled");
+                }
                 break;
             case "KeyA":
-                if (e.altKey) {
+                if (Input.alt) {
                     selectAllLines();
                 } else {
                     selectAllPoints();
@@ -48,7 +94,7 @@ const keydownHandler = function(e) {
                 deleteSelected();
                 break;
             case "KeyH":
-                if (e.altKey) {
+                if (Input.alt) {
                     unhide();
                 } else {
                     hide();
@@ -65,13 +111,45 @@ const keydownHandler = function(e) {
 const keyupHandler = function(e) {
     if (e.code === "ControlLeft" || e.code === "ControlRight") {
         Input.ctrl = false;
-        if (Input.drag && Input.gridSnapping) {
-            Input.gridSnapping = false;
-            GridSnapElem.classList.remove("enabled");
+        if (Input.drag && activePoint) {
             const fixSnappingOffset = Input.pointer.sub(activePoint.pos);
             selectedPoints.map((p) => {
                 p.pos.addMut(fixSnappingOffset);
             });
+        }
+        if (Input.gridSnapping === false)
+            GridSnapElem.classList.remove("enabled");
+
+        if (Input.gridCreation === false) {
+            GridCreateElem.classList.remove("enabled");
+            LatticeCreateElem.disabled = true;
+        }
+
+        if (Input.latticeCreation === false)
+            LatticeCreateElem.classList.remove("enabled");
+
+        if (e.shiftKey) BoxSelectionElem.classList.add("enabled");
+    } else if (e.code === "AltLeft" || e.code === "AltRight") {
+        Input.alt = false;
+        e.preventDefault();
+        if (Input.createConnectedPoint === false)
+            CreateConnectedElem.classList.remove("enabled");
+        if (Input.drawConnections === false)
+            DrawConnectionsElem.classList.remove("enabled");
+        if (Input.latticeCreation === false) {
+            LatticeCreateElem.classList.remove("enabled");
+        }
+    } else if (e.code === "ShiftLeft" || e.code === "ShiftRight") {
+        if (Input.boxSelection === false)
+            BoxSelectionElem.classList.remove("enabled");
+        if (Input.gridCreation === false) {
+            GridCreateElem.classList.remove("enabled");
+            LatticeCreateElem.disabled = true;
+            LatticeCreateElem.classList.remove("enabled");
+        }
+        if (Input.alt) {
+            CreateConnectedElem.classList.add("enabled");
+            DrawConnectionsElem.classList.add("enabled");
         }
     }
 };
@@ -108,7 +186,11 @@ const pointerDownHandler = function(e) {
         }
         if (foundPoint) {
             selectedLines.length = 0;
-            if (e.altKey || Input.drawConnections) {
+            if (
+                (Input.alt && e.shiftKey === false) ||
+                Input.drawConnections ||
+                Input.boxSelection
+            ) {
                 selectedPoints.length = 0;
             } else {
                 const selectionIndex = selectedPoints.indexOf(activePoint);
@@ -131,7 +213,7 @@ const pointerDownHandler = function(e) {
                     }
                 }
             }
-        } else if (foundLine) {
+        } else if (foundLine && Input.boxSelection === false) {
             selectedPoints.length = 0;
             const selectionIndex = selectedLines.indexOf(lastSelectedLine);
             if (selectionIndex < 0) {
@@ -151,7 +233,8 @@ const pointerDownHandler = function(e) {
                 Input.drag = true;
                 Input.gridCreation = true;
                 GridCreateElem.classList.add("enabled");
-                if (e.altKey) {
+                LatticeCreateElem.disabled = false;
+                if (Input.alt) {
                     Input.latticeCreation = true;
                     LatticeCreateElem.classList.add("enabled");
                 }
@@ -159,7 +242,7 @@ const pointerDownHandler = function(e) {
                 Input.boxSelection = true;
                 BoxSelectionElem.classList.add("enabled");
             } else {
-                createNewPoint(e.altKey || Input.createConnectedPoint);
+                createNewPoint(Input.alt || Input.createConnectedPoint);
                 Input.downState = false;
             }
         }
@@ -222,7 +305,8 @@ const pointerMoveHandler = function(e) {
                 for (let p of pointsOfSelectedLines) p.pos.addMut(Input.speed);
             } else {
                 if (
-                    (e.altKey || Input.drawConnections) &&
+                    ((Input.alt && e.shiftKey === false) ||
+                        Input.drawConnections) &&
                     Input.gridCreation === false &&
                     Input.boxSelection === false
                 ) {
@@ -307,7 +391,7 @@ const pointerUpHandler = function(e) {
             }
         }
         activePoint = newPoints[0][0];
-        if (e.altKey || Input.latticeCreation) {
+        if (Input.alt || Input.latticeCreation) {
             for (let i = 0; i <= Math.abs(gridWidth); i++) {
                 for (let j = 0; j <= Math.abs(gridHeight); j++) {
                     if (newPoints[i + 1]) {
@@ -339,15 +423,18 @@ const pointerUpHandler = function(e) {
                 }
             }
         }
-        Input.gridSnapping = false;
         Input.gridCreation = false;
         Input.latticeCreation = false;
-        GridSnapElem.classList.remove("enabled");
-        GridCreateElem.classList.remove("enabled");
-        LatticeCreateElem.classList.remove("enabled");
+        if (Input.ctrl === false && Input.gridSnapping === false)
+            GridSnapElem.classList.remove("enabled");
+        if (e.shiftKey === false) {
+            GridCreateElem.classList.remove("enabled");
+            LatticeCreateElem.disabled = true;
+        }
+        if (Input.alt === false) LatticeCreateElem.classList.remove("enabled");
     } else if (Input.boxSelection) {
         Input.boxSelection = false;
-        BoxSelectionElem.classList.remove("enabled");
+        if (e.shiftKey === false) BoxSelectionElem.classList.remove("enabled");
         const min = new Vector(
             Math.min(Input.pointer.x, Input.downPos.x),
             Math.min(Input.pointer.y, Input.downPos.y)
@@ -395,6 +482,7 @@ const gridSnapHandler = function(e) {
 const gridCreateHandler = function(e) {
     Input.gridCreation = !Input.gridCreation;
     GridCreateElem.classList.toggle("enabled");
+    LatticeCreateElem.disabled = !Input.gridCreation;
 };
 const LatticeCreateHandler = function(e) {
     if (Input.gridCreation) {

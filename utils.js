@@ -99,11 +99,13 @@ function relaxLines() {
 function hide() {
     selectedPoints.map((p) => (p.hidden = !p.hidden));
     selectedLines.map((l) => (l.hidden = !l.hidden));
+    UnhideElem.classList.add("enabled");
 }
 
 function unhide() {
     points.map((p) => (p.hidden = false));
     lines.map((l) => (l.hidden = false));
+    UnhideElem.classList.remove("enabled");
 }
 
 function deleteSelected() {

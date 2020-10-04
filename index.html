@@ -73,6 +73,9 @@
             #PauseElem.enabled #PauseIcon {
                 display: none;
             }
+            #LatticeCreateElem:disabled {
+                opacity: 0.5;
+            }
             .hide {
                 display: none;
             }
@@ -176,6 +179,7 @@
                     <button
                         id="LatticeCreateElem"
                         title="Lattice creation (Ctrl+Alt+Shift)"
+                        disabled
                     >
                         <svg viewBox="0 0 100 100">
                             <g id="LatticeCreationIcon" class="stroke">

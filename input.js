@@ -5,6 +5,7 @@ class Input {
     static downState = false;
     static drag = false;
     static ctrl = false;
+    static alt = false;
     static boxSelection = false;
     static createConnectedPoint = false;
     static drawConnections = false;

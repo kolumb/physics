@@ -3,7 +3,10 @@
 function tick() {
     if (pause) {
         if (Input.drag) {
-            if (Input.gridSnapping) {
+            if (
+                Input.gridSnapping ||
+                (Input.ctrl && Input.gridCreation === false)
+            ) {
                 const shift = Input.pointer.sub(Input.downPos);
                 const currentCell = new Vector(
                     Math.round(shift.x / cellSize),
@@ -19,11 +22,6 @@ function tick() {
                     });
                     Input.downCellIndex.addMut(diff);
                 }
-            } else if (Input.ctrl) {
-                Input.gridSnapping = true;
-                GridSnapElem.classList.add("enabled");
-                Input.downPos.setFrom(Input.pointer);
-                Input.downCellIndex.set(0, 0);
             }
         }
     } else {
@@ -62,7 +60,11 @@ function render() {
             selectionBox.x,
             selectionBox.y
         );
-    } else if (Input.downState && Input.drawConnections && activePoint) {
+    } else if (
+        Input.downState &&
+        (Input.drawConnections || Input.alt) &&
+        activePoint
+    ) {
         ctx.beginPath();
         ctx.moveTo(activePoint.pos.x, activePoint.pos.y);
         ctx.lineTo(Input.pointer.x, Input.pointer.y);
