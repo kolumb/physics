@@ -274,7 +274,7 @@ const pointerMoveHandler = function(e) {
                 Canvas.classList.add("interactable");
             }
         });
-        if (hoverPoint === undefined) {
+        if (pause && hoverPoint === undefined) {
             lines.map((l) => {
                 if (hoverLine) return;
                 const d = distToSegmentSquared(
