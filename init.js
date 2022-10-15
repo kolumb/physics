@@ -36,6 +36,21 @@ lines.push(new Line(points[0], points[1]));
 lines.push(new Line(points[1], points[2]));
 lines.push(new Line(points[2], points[0]));
 
+Input.gridCreation = true
+Input.drag = true
+Input.downPos.set(width / 4, - height)
+Input.pointer.set(width / 4 + cellSize * 4, - height + cellSize * 4)
+Input.latticeCreation = true
+
+pointerUpHandler({shiftKey: false})
+selectedPoints.length = 0
+
+Input.gridCreation = false
+Input.drag = false
+Input.downPos.set(0, 0)
+Input.pointer.set(0, 0)
+Input.latticeCreation = false
+
 frame();
 
 window.addEventListener("resize", resizeHandler);
