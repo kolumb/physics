@@ -465,6 +465,7 @@ const pointerUpHandler = function(e) {
 const pauseHandler = function(e) {
     pause = !pause;
     PauseElem.classList.toggle("enabled");
+    EditMenuElem.classList.toggle("hide");
     Input.drag = false;
     Input.downState = false;
     e.preventDefault();
