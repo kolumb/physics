@@ -47,6 +47,7 @@
                 height: 40px;
                 padding: 0;
                 border: none;
+                outline: none;
                 cursor: pointer;
                 background: rgba(20, 20, 50, 0.1);
                 transition: background 200ms;
@@ -54,8 +55,17 @@
             button:hover {
                 background: rgba(20, 30, 70, 0.3);
             }
+            button:active {
+                background: rgba(20, 30, 70, 0.5);
+            }
             .enabled {
                 background: rgba(161, 112, 235, 0.67);
+            }
+            .enabled:hover {
+                background: rgba(151, 102, 235, 0.9);
+            }
+            .enabled:active {
+                background: rgba(171, 122, 255, 0.7);
             }
             .controls button:hover g {
                 fill: white;
