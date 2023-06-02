@@ -62,7 +62,7 @@ window.addEventListener("pointerup", pointerUpHandler);
 document.querySelector("#PauseElem").addEventListener("click", pauseHandler);
 document.querySelector("#BoxSelectionElem").addEventListener("click", () => {
     Input.boxSelection = !Input.boxSelection;
-    BoxSelectionElem.classList.toggle("enabled");
+    Input.boxSelection ? BoxSelectionElem.classList.add("enabled") : BoxSelectionElem.classList.remove("enabled");
 });
 document
     .querySelector("#SelectAllPointsElem")
